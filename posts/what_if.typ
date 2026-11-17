@@ -3,4 +3,5 @@
 #guide-entry(title: "From the Guide")[
   #lorem(10)
 ]
-#flow-divider()
+
+// #flow-divider()

@@ -18,7 +18,8 @@ lib/components.typ    # content blocks: guide-entry, definition, theorem, remark
 lib/art.typ           # animated line art (inline SVG): hero cylinder flow, card banners, wave divider
 posts/dummy.typ       # style guide: a tour of every feature (unlisted page at /dummy)
 assets/style.css      # the theme (light/dark, full-width, grid of guides)
-build.sh              # builds the site into dist/
+build.sh              # production build into dist/ (published guides only; same as CI)
+dev.sh                # live preview with auto-reload + drafts, into dist-dev/
 .github/workflows/deploy.yml   # CI: build + deploy on push to main
 ```
 
@@ -78,25 +79,36 @@ build.sh              # builds the site into dist/
    `date` and `body` are only needed when `status: "published"`. Cards appear on the home
    page in the order of this list.
 
-3. **Preview locally**
+3. **Preview while writing**
 
    ```sh
-   ./build.sh && python -m http.server -d dist 8000
-   # open http://localhost:8000
+   ./dev.sh            # → http://127.0.0.1:3000  (or ./dev.sh 8000 for another port)
    ```
 
-   For a live-reload loop while writing:
+   This rebuilds on every save and **reloads the browser automatically**. Compile errors print
+   in the terminal, and the last good version stays on screen until you fix them. It also renders
+   **drafts**: any guide with a `body` whose status isn't `"published"` gets a page (marked
+   "Draft" with a "Draft preview →" card). Output goes to `dist-dev/`, which is git-ignored.
 
-   ```sh
-   typst watch --features html,bundle --format bundle main.typ dist/ &
-   python -m http.server -d dist 8000
-   ```
+   To check exactly what will go live, build like CI does: `./build.sh`, then open `dist/`.
 
 4. **Publish**: commit and push to `main`. The *Build & deploy* workflow takes about a minute.
    Watch it with `gh run watch`.
 
-Drafts: keep a post's `status: "planned"` (no page is generated) until it's ready, or work on a branch.
-Only `main` deploys.
+### Drafts
+
+Give the guide a `body` but keep `status: "ongoing"` (or `"planned"`). `./dev.sh` renders it so you
+can write and preview; `./build.sh` and the deploy skip it, so the live site only shows an
+"In progress" card. `date` is optional for drafts. When it's ready, set `status: "published"`
+and a `date`, then push.
+
+### "My change didn't show up"
+
+- **The build failed.** `./build.sh` stops at the first Typst error and prints `error: …` (easy to miss
+  among the `warning:` lines). With `./dev.sh` the error shows on every save.
+- **It's a draft.** `./build.sh` skips anything not `"published"`. Use `./dev.sh`.
+- **Browser cache.** `python -m http.server` lets the browser reuse old copies. Hard-refresh
+  (Ctrl+Shift+R) or use `./dev.sh`, which reloads for you.
 
 ## Components (`lib/components.typ`)
 

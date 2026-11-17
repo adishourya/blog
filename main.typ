@@ -3,6 +3,12 @@
 
 #import "lib/template.typ": page-shell, site-title, site-tagline
 #import "posts/_posts.typ": guides, published
+
+// Draft mode (./dev.sh passes --input drafts=true): also render guides that have a
+// `body` but aren't published yet, so you can preview them. Production builds skip them.
+#let drafts = sys.inputs.at("drafts", default: "false") == "true"
+#let is-draft(g) = drafts and g.status != "published" and "body" in g
+#let rendered = guides.filter(g => g.status == "published" or is-draft(g))
 #import "lib/art.typ": cylinder-flow, card-banner, flow-divider
 
 #asset("style.css", read("assets/style.css"))
@@ -22,8 +28,8 @@
     #html.h2(class: "section-title")[Guides]
     #html.ul(class: "guide-grid")[
       #for (i, g) in guides.enumerate() {
-        let is-live = g.status == "published"
-        let status-label = if is-live { "Read guide →" } else if g.status == "ongoing" { "In progress" } else { "Coming soon" }
+        let is-live = g.status == "published" or is-draft(g)
+        let status-label = if is-draft(g) { "Draft preview →" } else if is-live { "Read guide →" } else if g.status == "ongoing" { "In progress" } else { "Coming soon" }
         html.li(
           class: "guide-card card-" + g.at("color", default: "sky") + if is-live { "" } else { " is-planned" },
         )[
@@ -65,21 +71,23 @@
 ]
 
 // ---------- Guides ----------
-#for g in published {
+#for g in rendered {
   // Friendly errors for common registry mistakes.
   assert("body" in g, message: "guide '" + g.slug + "' is published but has no `body: include \"<file>.typ\"`")
+  let date = g.at("date", default: none)
   assert(
-    type(g.at("date", default: none)) == datetime,
+    date == none and is-draft(g) or type(date) == datetime,
     message: "guide '" + g.slug + "' needs `date: datetime(year: ..., month: ..., day: ...)` (not a string)",
   )
   document(g.slug + ".html", title: g.title)[
     #page-shell(
       path: g.slug + ".html",
       title: g.title,
-      kicker: g.source,
+      kicker: if is-draft(g) { "Draft · " + g.source } else { g.source },
       description: g.summary,
-      date: g.date,
+      date: date,
       accent: g.at("color", default: "sky"),
+      noindex: is-draft(g),
       g.body,
     )
   ]
