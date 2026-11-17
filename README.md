@@ -152,9 +152,8 @@ bottom shadow; Outfit headings, Nunito Sans body text.
 - **Palette**: five colours (`coral`, `sun`, `mint`, `sky`, `grape`), each with a `-tint`, defined at the
   top of `assets/style.css`. A guide's `color` in the registry sets its card colour *and* the accent
   of its post page (header box, heading underlines, links, list markers).
-- **Light/dark**: `:root` holds the light values; the two dark blocks (`prefers-color-scheme` and
-  `[data-theme="dark"]`) must stay identical. The ☾/☀ button toggles and remembers the choice in
-  `localStorage`. With no choice saved, the OS setting wins.
+- **Light/dark**: `:root` holds the light values, `:root[data-theme="dark"]` the dark ones. The ☾/☀ button toggles and remembers the choice in
+  `localStorage`. Light is the default; dark only applies after the reader clicks the toggle.
 - **Width**: header, hero and the guide grid span the full viewport (side padding `--pad`); the grid
   fits as many 290px+ cards per row as it can. Article text sits in a centred column of
   `--measure` (52rem).

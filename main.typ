@@ -13,7 +13,7 @@
     #html.section(class: "hero")[
       #html.div(class: "hero-text")[
         #html.h1(class: "hero-title")[#site-title]
-        #html.p(class: "hero-lede")[#site-tagline Long books, distilled into guides you can carry in your pocket.]
+        #html.p(class: "hero-lede")[#site-tagline]
       ]
       #html.div(class: "hero-art")[#cylinder-flow()]
     ]
@@ -66,6 +66,12 @@
 
 // ---------- Guides ----------
 #for g in published {
+  // Friendly errors for common registry mistakes.
+  assert("body" in g, message: "guide '" + g.slug + "' is published but has no `body: include \"<file>.typ\"`")
+  assert(
+    type(g.at("date", default: none)) == datetime,
+    message: "guide '" + g.slug + "' needs `date: datetime(year: ..., month: ..., day: ...)` (not a string)",
+  )
   document(g.slug + ".html", title: g.title)[
     #page-shell(
       path: g.slug + ".html",

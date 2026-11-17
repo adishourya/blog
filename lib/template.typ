@@ -1,16 +1,18 @@
 // Page shell shared by every HTML document in the bundle.
 
-#let site-title = "Infinite Improbability"
-#let site-tagline = "Hitchhiker's guides to physics, computation & learning — by Adi Shourya."
+// #let site-title = "Infinite Improbability"
+#let site-title = "Underclocked Thoughts"
+// #let site-tagline = "Hitchhiker's guides to physics, computation & learning — by Adi Shourya."
+#let site-tagline = "A slow atom drifting through computational waters."
 
 #let nav-links = (
   ("index.html", "Guides"),
   ("about.html", "About"),
 )
 
-// Applies a saved light/dark choice before first paint; falls back to the OS setting.
+// Applies a saved light/dark choice before first paint; light is the default.
 #let theme-init = "try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}"
-#let theme-toggle-js = "document.getElementById('theme-toggle').addEventListener('click',function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=d==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}})"
+#let theme-toggle-js = "document.getElementById('theme-toggle').addEventListener('click',function(){var r=document.documentElement,d=r.dataset.theme||'light',n=d==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}})"
 
 // Wrap `body` in a full <html> document with head, header, nav and footer.
 // `path` is this page's output file, used to highlight the active nav link.

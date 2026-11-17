@@ -50,7 +50,9 @@
     short: "What If?",
     source: "Hernán & Robins",
     summary: "Causality is messy on medical data",
-    status: "ongoing",
+    status: "published",
+    date: datetime(year: 2026, month: 11, day: 17),
+    body: include "what_if.typ",
   ),
 )
 
