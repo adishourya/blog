@@ -1,4 +1,7 @@
 // Reusable content blocks for posts. Each maps to a CSS class in assets/style.css.
+// Also re-exports the animated line art from art.typ (flow-divider, cylinder-flow).
+
+#import "art.typ": flow-divider, cylinder-flow
 
 // A boxed aside, as if quoted from the Guide itself.
 #let guide-entry(title: "From the Guide", body) = html.aside(class: "guide-entry")[
@@ -17,3 +20,10 @@
 
 // Small note set off from the main text (floats into the margin on wide screens).
 #let margin-note(body) = html.span(class: "margin-note")[#body]
+
+// A figure with a caption. Wrap Typst drawings in html.frame so they render as SVG:
+//   #figure-box(caption: [...])[#html.frame(...)]
+#let figure-box(caption: none, body) = html.figure(class: "figure-box")[
+  #body
+  #if caption != none { html.figcaption[#caption] }
+]

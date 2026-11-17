@@ -14,7 +14,9 @@ posts/_posts.typ      # registry of guides (title, summary, status, date, body) 
 posts/about.typ       # the About page
 posts/<slug>.typ      # one file per guide
 lib/template.typ      # page shell: <head>, header/nav, theme toggle, footer; site title & tagline
-lib/components.typ    # content blocks: guide-entry, definition, theorem, remark, margin-note
+lib/components.typ    # content blocks: guide-entry, definition, theorem, remark, margin-note, figure-box
+lib/art.typ           # animated line art (inline SVG): hero cylinder flow, card banners, wave divider
+posts/dummy.typ       # style guide: a tour of every feature (unlisted page at /dummy)
 assets/style.css      # the theme (light/dark, full-width, grid of guides)
 build.sh              # builds the site into dist/
 .github/workflows/deploy.yml   # CI: build + deploy on push to main
@@ -26,6 +28,11 @@ build.sh              # builds the site into dist/
 - Optional: Python, to preview locally.
 
 ## Write a new guide
+
+> **Start from the style guide.** `posts/dummy.typ` shows every feature (text, math, callouts,
+> line art, Typst-drawn figures, code, tables, raw HTML) next to its source. It renders as an
+> unlisted page at **/dummy**: not on the home page, and marked `noindex` for search engines.
+> Copy it to `posts/<slug>.typ` and delete what you don't need.
 
 1. **Create the post** at `posts/<slug>.typ`. The slug becomes the URL: `adishourya.pages.dev/<slug>`.
 
@@ -59,10 +66,10 @@ build.sh              # builds the site into dist/
      slug: "deep-hopfield-networks",
      title: "Deep Hopfield Networks",
      color: "sky",                                  // card/accent colour: coral | sun | mint | sky | grape
-     glyph: "∇",                                    // big symbol drawn on the card
+     short: "Hopfield",                             // optional: name drawn in outline on the card banner
      source: "Associative memory, revisited",      // small label above the title
      summary: "From energy-based attractors to modern Hopfield layers and attention.",
-     status: "published",                           // "planned" = greyed "Coming soon" card
+     status: "published",                           // or "ongoing" ("In progress") / "planned" ("Coming soon")
      date: datetime(year: 2026, month: 11, day: 17),
      body: include "deep-hopfield-networks.typ",
    ),
@@ -101,6 +108,9 @@ Only `main` deploys.
 | `#remark[…]` | dashed green box |
 | `#callout(kind: "note", title: "…")[…]` | generic box (`kind` maps to CSS class `callout-<kind>`) |
 | `#margin-note[…]` | small accent-tinted side note |
+| `#figure-box(caption: […])[…]` | framed figure with caption (wrap Typst drawings in `html.frame`) |
+| `#cylinder-flow()` | animated line art: potential flow past a cylinder + vortex street + sun |
+| `#flow-divider()` | animated wave line between sections |
 
 To add a component: define a function that returns `html.div(class: "my-thing")[…]` (or any
 `html.<tag>`) in `lib/components.typ`, then style `.my-thing` in `assets/style.css`.
@@ -120,8 +130,9 @@ To add a component: define a function that returns `html.div(class: "my-thing")[
 
 Typst's HTML export is still experimental. Things to know:
 
-- Page-layout features (`page`, `columns`, `place`, `pagebreak`, fixed sizes) have no HTML meaning
+- Page-layout features (`page`, `columns`, `place`, `pagebreak`, `h`/`v` spacing) have no HTML meaning
   and are ignored. Use `html.frame` when you need exact visual layout.
+- `#footnote` is not supported (it clashes with the custom page shell). Use `#margin-note[…]`.
 - Raw HTML is available everywhere: `html.div(class: "x")[…]`, `html.elem("details")[…]`, etc.
 - `--features html,bundle` must be passed (already in `build.sh` and CI).
 - When upgrading Typst, bump `typst-version` in `.github/workflows/deploy.yml` too, then build
@@ -129,8 +140,14 @@ Typst's HTML export is still experimental. Things to know:
 
 ## Theme
 
-Playful and chunky: bright colour-coded cards with a big symbol, thick outlines with a "pressable"
-bottom shadow, Outfit headings and Nunito Sans body text.
+Sunny, playful line art with a fluid-mechanics feel: the home page shows animated streamlines of
+potential flow past a cylinder (computed in `lib/art.typ` from ψ = U·y·(1 − R²/r²)) with a vortex
+street and a sun; each guide card has flowing streamlines behind its name drawn in outline; section
+headings get a travelling wave underline. Cards and boxes have thick outlines with a "pressable"
+bottom shadow; Outfit headings, Nunito Sans body text.
+
+- **Animations** (`.flow`, `.spin`, `.wave` in `assets/style.css`) are pure CSS and switch off
+  automatically when the reader has "reduce motion" enabled.
 
 - **Palette**: five colours (`coral`, `sun`, `mint`, `sky`, `grape`), each with a `-tint`, defined at the
   top of `assets/style.css`. A guide's `color` in the registry sets its card colour *and* the accent

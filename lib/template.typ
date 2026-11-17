@@ -21,6 +21,7 @@
   date: none,
   kicker: none,
   accent: "sky",
+  noindex: false,
   body,
 ) = {
   let full-title = if title == none { site-title } else { title + " · " + site-title }
@@ -30,6 +31,7 @@
       #html.meta(charset: "utf-8")
       #html.meta(name: "viewport", content: "width=device-width, initial-scale=1")
       #html.meta(name: "description", content: description)
+      #if noindex { html.meta(name: "robots", content: "noindex") }
       #html.title(full-title)
       #html.link(rel: "preconnect", href: "https://fonts.googleapis.com")
       #html.link(rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous")
@@ -76,7 +78,7 @@
       ]
       #html.footer(class: "site-footer")[
         #html.div(class: "wrap")[
-          #html.p[© #datetime.today().year() Adi Shourya · Written in #link("https://typst.app")[Typst] · Don't panic.]
+          #html.p[© #datetime.today().year() Adi Shourya · Written in #link("https://typst.app")[Typst].]
         ]
       ]
       #html.script(theme-toggle-js)
