@@ -2,7 +2,6 @@
 // Build with ./build.sh (typst compile --features html,bundle --format bundle main.typ dist/).
 
 #import "lib/template.typ": page-shell, site-title, site-tagline
-#import "lib/components.typ": dont-panic
 #import "posts/_posts.typ": guides, published
 
 #asset("style.css", read("assets/style.css"))
@@ -11,13 +10,12 @@
 #document("index.html", title: site-title)[
   #page-shell(path: "index.html")[
     #html.section(class: "hero")[
-      #dont-panic()
-      #html.h1(class: "hero-title")[Infinite Improbability]
+      #html.h1(class: "hero-title")[#site-title]
       #html.p(class: "hero-lede")[#site-tagline Long books, distilled into guides you can carry in your pocket.]
     ]
 
-    #html.h2[The Guides]
-    #html.ul(class: "guide-list")[
+    #html.h2(class: "section-title")[Guides]
+    #html.ul(class: "guide-grid")[
       #for g in guides {
         let is-live = g.status == "published"
         html.li(class: "guide-card" + if is-live { "" } else { " is-planned" })[
@@ -37,7 +35,7 @@
 
 // ---------- About ----------
 #document("about.html", title: "About")[
-  #page-shell(path: "about.html", title: "About me", kicker: "Entry: Author", description: "Who writes these guides.")[
+  #page-shell(path: "about.html", title: "About me", kicker: "About", description: "Who writes these guides.")[
     #include "posts/about.typ"
   ]
 ]
@@ -48,7 +46,7 @@
     #page-shell(
       path: g.slug + ".html",
       title: g.title,
-      kicker: "Hitchhiker's Guide · " + g.source,
+      kicker: g.source,
       description: g.summary,
       date: g.date,
       g.body,

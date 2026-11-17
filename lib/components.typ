@@ -1,8 +1,5 @@
 // Reusable content blocks for posts. Each maps to a CSS class in assets/style.css.
 
-// The big friendly badge.
-#let dont-panic(size: "large") = html.span(class: "dont-panic " + size)[Don't Panic]
-
 // A boxed aside, as if quoted from the Guide itself.
 #let guide-entry(title: "From the Guide", body) = html.aside(class: "guide-entry")[
   #html.p(class: "guide-entry-title")[#title]

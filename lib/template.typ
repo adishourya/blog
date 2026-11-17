@@ -8,6 +8,10 @@
   ("about.html", "About"),
 )
 
+// Applies a saved light/dark choice before first paint; falls back to the OS setting.
+#let theme-init = "try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}"
+#let theme-toggle-js = "document.getElementById('theme-toggle').addEventListener('click',function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=d==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}})"
+
 // Wrap `body` in a full <html> document with head, header, nav and footer.
 // `path` is this page's output file, used to highlight the active nav link.
 #let page-shell(
@@ -30,17 +34,15 @@
       #html.link(rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous")
       #html.link(
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap",
       )
       #html.link(rel: "stylesheet", href: "style.css")
+      #html.script(theme-init)
     ]
     #html.body[
       #html.header(class: "site-header")[
         #html.div(class: "wrap header-inner")[
-          #html.a(class: "brand", href: "index.html")[
-            #html.span(class: "brand-kicker")[Infinite]
-            #html.span(class: "brand-x")[Improbability]
-          ]
+          #html.a(class: "brand", href: "index.html")[#site-title]
           #html.nav(class: "site-nav", aria-label: "Main")[
             #for (href, label) in nav-links {
               if href == path {
@@ -49,6 +51,9 @@
                 html.a(href: href)[#label]
               }
             }
+            #html.button(id: "theme-toggle", class: "theme-toggle", type: "button", aria-label: "Toggle dark mode", title: "Toggle dark mode")[
+              #html.span(class: "icon-sun")[☀]#html.span(class: "icon-moon")[☾]
+            ]
           ]
         ]
       ]
@@ -60,7 +65,7 @@
               #html.h1[#title]
               #if date != none {
                 html.p(class: "meta")[
-                  #html.time(datetime: date.display())[#date.display("[month repr:long] [day padding:none], [year]")]
+                  #html.time(datetime: date)[#date.display("[month repr:long] [day padding:none], [year]")]
                 ]
               }
             ]
@@ -70,10 +75,10 @@
       ]
       #html.footer(class: "site-footer")[
         #html.div(class: "wrap")[
-          #html.span(class: "dont-panic small")[Don't Panic]
-          #html.p[Written in #link("https://typst.app")[Typst]. Always know where your towel is.]
+          #html.p[© #datetime.today().year() Adi Shourya · Written in #link("https://typst.app")[Typst] · Don't panic.]
         ]
       ]
+      #html.script(theme-toggle-js)
     ]
   ]
 }
