@@ -15,6 +15,7 @@
   --font-math: "STIX Two Math", "Latin Modern Math", "Cambria Math", math;
 
   --pad: clamp(16px, 5vw, 72px);
+  --measure: 44rem;          /* ~75 characters of body text */
   --radius: 10px;
   color-scheme: light;
 }
@@ -59,8 +60,12 @@ body {
   transition: background-color 150ms ease, color 150ms ease;
 }
 
-/* Full width: content spans the viewport, only side padding. */
+/* Layout spans the viewport; reading text is capped, the guide grid is not. */
 .wrap { width: 100%; padding-inline: var(--pad); }
+article > * { max-width: var(--measure); }
+article > .guide-grid,
+article > .hero,
+article > .post-header { max-width: none; }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; }

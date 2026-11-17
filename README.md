@@ -131,8 +131,9 @@ Typst's HTML export is still experimental. Things to know:
   blocks (`prefers-color-scheme` and `[data-theme="dark"]`). Keep those two dark blocks identical.
 - The ☾/☀ button toggles light/dark and remembers the choice in `localStorage`. With no choice saved,
   the OS setting wins.
-- Content uses the full viewport width with responsive side padding (`--pad`). Guides render as a
-  responsive grid (`.guide-grid`, min card width 280px).
+- Header, footer and the guide grid use the full viewport width with responsive side padding (`--pad`);
+  guides render as a responsive grid (`.guide-grid`, min card width 280px). Article text is capped at
+  `--measure` (44rem ≈ 75 characters) for readability.
 - Site title, tagline and nav links live at the top of `lib/template.typ`.
 
 ## Deployment
