@@ -12,7 +12,7 @@
   #page-shell(path: "index.html")[
     #html.section(class: "hero")[
       #dont-panic()
-      #html.h1(class: "hero-title")[The Hitchhiker's Guide to X]
+      #html.h1(class: "hero-title")[Infinite Improbability]
       #html.p(class: "hero-lede")[#site-tagline Long books, distilled into guides you can carry in your pocket.]
     ]
 

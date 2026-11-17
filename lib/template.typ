@@ -1,7 +1,7 @@
 // Page shell shared by every HTML document in the bundle.
 
-#let site-title = "The Hitchhiker's Guide to X"
-#let site-tagline = "Mostly harmless notes on physics, computation & learning."
+#let site-title = "Infinite Improbability"
+#let site-tagline = "Hitchhiker's guides to physics, computation & learning — by Adi Shourya."
 
 #let nav-links = (
   ("index.html", "Guides"),
@@ -38,8 +38,8 @@
       #html.header(class: "site-header")[
         #html.div(class: "wrap header-inner")[
           #html.a(class: "brand", href: "index.html")[
-            #html.span(class: "brand-kicker")[The Hitchhiker's Guide to]
-            #html.span(class: "brand-x")[X]
+            #html.span(class: "brand-kicker")[Infinite]
+            #html.span(class: "brand-x")[Improbability]
           ]
           #html.nav(class: "site-nav", aria-label: "Main")[
             #for (href, label) in nav-links {
