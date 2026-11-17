@@ -20,6 +20,7 @@
   description: site-tagline,
   date: none,
   kicker: none,
+  accent: "sky",
   body,
 ) = {
   let full-title = if title == none { site-title } else { title + " · " + site-title }
@@ -34,12 +35,12 @@
       #html.link(rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous")
       #html.link(
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&family=JetBrains+Mono:wght@400;600&display=swap",
       )
       #html.link(rel: "stylesheet", href: "style.css")
       #html.script(theme-init)
     ]
-    #html.body[
+    #html.body(class: "accent-" + accent)[
       #html.header(class: "site-header")[
         #html.div(class: "wrap header-inner")[
           #html.a(class: "brand", href: "index.html")[#site-title]

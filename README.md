@@ -58,6 +58,8 @@ build.sh              # builds the site into dist/
    (
      slug: "deep-hopfield-networks",
      title: "Deep Hopfield Networks",
+     color: "sky",                                  // card/accent colour: coral | sun | mint | sky | grape
+     glyph: "∇",                                    // big symbol drawn on the card
      source: "Associative memory, revisited",      // small label above the title
      summary: "From energy-based attractors to modern Hopfield layers and attention.",
      status: "published",                           // "planned" = greyed "Coming soon" card
@@ -93,12 +95,12 @@ Only `main` deploys.
 
 | Call | Renders as |
 |---|---|
-| `#guide-entry(title: "From the Guide")[…]` | accent-tinted aside, good for a TL;DR |
-| `#definition(title: "…")[…]` | box with blue left rule |
-| `#theorem(title: "…")[…]` | box with amber left rule |
-| `#remark[…]` | dashed box |
+| `#guide-entry(title: "From the Guide")[…]` | yellow aside, good for a TL;DR |
+| `#definition(title: "…")[…]` | blue box |
+| `#theorem(title: "…")[…]` | purple box |
+| `#remark[…]` | dashed green box |
 | `#callout(kind: "note", title: "…")[…]` | generic box (`kind` maps to CSS class `callout-<kind>`) |
-| `#margin-note[…]` | small muted side note |
+| `#margin-note[…]` | small accent-tinted side note |
 
 To add a component: define a function that returns `html.div(class: "my-thing")[…]` (or any
 `html.<tag>`) in `lib/components.typ`, then style `.my-thing` in `assets/style.css`.
@@ -127,13 +129,18 @@ Typst's HTML export is still experimental. Things to know:
 
 ## Theme
 
-- Colours are CSS variables at the top of `assets/style.css`: `:root` for light, and the two dark
-  blocks (`prefers-color-scheme` and `[data-theme="dark"]`). Keep those two dark blocks identical.
-- The ☾/☀ button toggles light/dark and remembers the choice in `localStorage`. With no choice saved,
-  the OS setting wins.
-- Header, footer and the guide grid use the full viewport width with responsive side padding (`--pad`);
-  guides render as a responsive grid (`.guide-grid`, min card width 280px). Article text is capped at
-  `--measure` (44rem ≈ 75 characters) for readability.
+Playful and chunky: bright colour-coded cards with a big symbol, thick outlines with a "pressable"
+bottom shadow, Outfit headings and Nunito Sans body text.
+
+- **Palette**: five colours (`coral`, `sun`, `mint`, `sky`, `grape`), each with a `-tint`, defined at the
+  top of `assets/style.css`. A guide's `color` in the registry sets its card colour *and* the accent
+  of its post page (header box, heading underlines, links, list markers).
+- **Light/dark**: `:root` holds the light values; the two dark blocks (`prefers-color-scheme` and
+  `[data-theme="dark"]`) must stay identical. The ☾/☀ button toggles and remembers the choice in
+  `localStorage`. With no choice saved, the OS setting wins.
+- **Width**: header, hero and the guide grid span the full viewport (side padding `--pad`); the grid
+  fits as many 290px+ cards per row as it can. Article text sits in a centred column of
+  `--measure` (52rem).
 - Site title, tagline and nav links live at the top of `lib/template.typ`.
 
 ## Deployment
