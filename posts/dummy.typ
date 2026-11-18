@@ -10,9 +10,9 @@
 #import "../lib/components.typ": *
 
 // ---------------------------------------------------------------------
-// guide-entry: the yellow TL;DR box. Good as the first thing in a post.
+// callout: the one box for everything. Default is a yellow TL;DR box.
 // ---------------------------------------------------------------------
-#guide-entry(title: "From the Guide")[
+#callout(title: "From the Guide")[
   This page is a working example. Each section shows one feature, and the
   Typst source sits in `posts/dummy.typ`. Read the two side by side.
 ]
@@ -56,28 +56,46 @@ Math is exported as native MathML, so it is crisp at any zoom and needs no JavaS
 
 = Callout boxes
 
-#definition(title: "Stream function")[
+There is one box, `#callout`, and you style it with arguments. With no arguments it's a
+yellow box with an ink outline and the chunky shadow:
+
+#callout(title: "Takeaway")[
+  `#callout(title: "Takeaway")[...]`. The title is optional.
+]
+
+`color` takes a palette name (`"coral"`, `"sun"`, `"mint"`, `"sky"`, `"grape"`),
+a hex string, or any Typst colour. It sets the title pill and a light background tint:
+
+#callout(title: "Definition — Stream function", color: "sky")[
   For 2-D incompressible flow, $psi$ is defined by
   $u = partial_y psi$, $v = -partial_x psi$, so $nabla dot bold(u) = 0$ holds automatically.
 ]
 
-#theorem(title: "Kelvin's circulation theorem")[
+#callout(title: "Theorem — Kelvin's circulation theorem", color: "grape")[
   In an inviscid, barotropic fluid with conservative body forces, the circulation
   around a material loop is constant: $ (D Gamma) / (D t) = 0 $
 ]
 
-#remark[
-  A remark is softer: an aside, a caveat, a "you can skip this".
+`fill` sets the background exactly, and `stroke` sets the border colour:
+
+#callout(title: "Custom colours", color: "#0f766e", fill: "#ccfbf1", stroke: "#0f766e")[
+  `color: "#0f766e", fill: "#ccfbf1", stroke: "#0f766e"`
 ]
 
-#callout(kind: "definition", title: "Any title you like")[
-  `callout(kind: ..., title: ...)` is the generic version.
-  `kind` is one of `"definition"`, `"theorem"` or `"note"`, and sets the colour.
+`border` is `"solid"` (default), `"dashed"`, `"dotted"`, `"left"` (an accent bar only)
+or `"none"`. `shadow: false` removes the bottom shadow:
+
+#callout(title: "Remark", color: "mint", border: "dashed", shadow: false)[
+  `border: "dashed", shadow: false`: softer, for asides and caveats.
 ]
 
-Margin notes are small asides that sit inline with the text:
-#margin-note[Like this one. Use them for citations or "fun fact" tangents.]
-the paragraph simply continues after them.
+#callout(color: "coral", border: "left")[
+  `border: "left"` with no title: a quiet side note, good for citations or fun-fact tangents.
+]
+
+#callout(title: "Any Typst colour", color: rgb("#ff9f1c"), stroke: rgb("#ff9f1c"), fill: none, border: "dotted")[
+  `color: rgb("#ff9f1c"), stroke: rgb("#ff9f1c"), fill: none, border: "dotted"`: transparent background.
+]
 
 = Line art & animation
 
@@ -135,7 +153,7 @@ def stream_function(x, y, U=1.0, R=1.0):
 ```
 
 ```typ
-#definition(title: "Stream function")[ ... ]
+#callout(title: "Stream function", color: "sky")[ ... ]
 ```
 
 = Tables
@@ -159,7 +177,7 @@ When you need an element Typst doesn't have, write it directly:
 ]
 
 // Note: Typst's #footnote is not supported in this HTML setup yet.
-// Use #margin-note[...] for asides instead.
+// Use #callout(border: "left")[...] for asides instead.
 
 #flow-divider()
 

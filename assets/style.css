@@ -218,29 +218,27 @@ table { border-collapse: separate; border-spacing: 0; width: 100%; display: tabl
 th, td { padding: 0.6em 1em; border-bottom: 1px solid var(--rule); text-align: left; }
 th { font-family: var(--font-head); background: var(--accent-tint); }
 
-/* ---------- Guide entry & callouts ---------- */
-.guide-entry, .callout {
+/* ---------- Callout (one component; colours come from inline --c vars) ---------- */
+.callout {
+  --c: var(--sun);
   margin: 2em auto; padding: 1.2rem 1.4rem;
-  border: 2px solid var(--edge); border-radius: var(--radius); background: var(--surface); box-shadow: var(--press);
+  background: var(--c-fill, color-mix(in srgb, var(--c) 16%, var(--bg)));
+  border: 2px solid var(--c-stroke, var(--edge));
+  border-radius: var(--radius);
+  box-shadow: 0 5px 0 var(--c-stroke, var(--edge));
 }
-.guide-entry { background: var(--sun-tint); }
-.guide-entry > :last-child, .callout > :last-child { margin-bottom: 0; }
-.guide-entry-title, .callout-title {
+.callout > :last-child { margin-bottom: 0; }
+.callout code { background: color-mix(in srgb, currentColor 10%, transparent); color: inherit; }
+.callout.border-dashed { border-style: dashed; }
+.callout.border-dotted { border-style: dotted; border-width: 3px; }
+.callout.border-none { border-color: transparent; }
+.callout.border-left { border-width: 0 0 0 6px; border-color: var(--c-stroke, var(--c)); border-radius: 6px var(--radius) var(--radius) 6px; }
+.callout.no-shadow, .callout.border-none, .callout.border-left { box-shadow: none; }
+.callout-title {
   display: table; margin: 0 0 0.6em;
   font-family: var(--font-head); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;
-  padding: 0.2em 0.75em; border-radius: 999px; border: 2px solid var(--edge); background: var(--surface);
-}
-.guide-entry-title { background: var(--sun); color: #1b1d29; }
-.callout-definition { background: var(--sky-tint); }
-.callout-definition .callout-title { background: var(--sky); color: #fff; }
-.callout-theorem { background: var(--grape-tint); }
-.callout-theorem .callout-title { background: var(--grape); color: #fff; }
-.callout-note { background: var(--mint-tint); box-shadow: none; border-style: dashed; }
-.callout-note .callout-title { background: var(--mint); color: #fff; }
-
-.margin-note {
-  display: block; font-size: 0.95rem; color: var(--ink-soft);
-  background: var(--accent-tint); border-radius: 12px; padding: 0.6em 0.9em; margin: 0.5em 0 1em;
+  padding: 0.2em 0.75em; border-radius: 999px; border: 2px solid var(--edge);
+  background: var(--c); color: var(--c-on, #fff);
 }
 
 /* ---------- Math (native MathML from Typst) ---------- */

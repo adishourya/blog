@@ -14,7 +14,7 @@ posts/_posts.typ      # registry of guides (title, summary, status, date, body) 
 posts/about.typ       # the About page
 posts/<slug>.typ      # one file per guide
 lib/template.typ      # page shell: <head>, header/nav, theme toggle, footer; site title & tagline
-lib/components.typ    # content blocks: guide-entry, definition, theorem, remark, margin-note, figure-box
+lib/components.typ    # content blocks: callout (the one box), figure-box
 lib/art.typ           # animated line art (inline SVG): hero cylinder flow, card banners, wave divider
 posts/dummy.typ       # style guide: a tour of every feature (unlisted page at /dummy)
 assets/style.css      # the theme (light/dark, full-width, grid of guides)
@@ -40,7 +40,7 @@ dev.sh                # live preview with auto-reload + drafts, into dist-dev/
    ```typ
    #import "../lib/components.typ": *
 
-   #guide-entry[
+   #callout(title: "From the Guide")[
      One-paragraph summary of what this guide covers and who it's for.
    ]
 
@@ -49,7 +49,7 @@ dev.sh                # live preview with auto-reload + drafts, into dist-dev/
 
    $ Z = sum_(bold(x)) product_a psi_a (bold(x)_(partial a)) $
 
-   #definition(title: "Bethe free energy")[
+   #callout(title: "Definition — Bethe free energy", color: "sky")[
      $F_"Bethe" = -1/beta log Z_"Bethe"$
    ]
 
@@ -112,14 +112,26 @@ and a `date`, then push.
 
 ## Components (`lib/components.typ`)
 
-| Call | Renders as |
+There is **one box**, `#callout`, styled with arguments:
+
+```typ
+#callout(
+  title: "Definition — Stream function",  // optional pill label
+  color: "sky",        // pill + background tint: "coral" | "sun" | "mint" | "sky" | "grape", "#hex" or rgb(...)
+  fill: auto,          // background: auto = tint of color, none = transparent, or a colour
+  stroke: auto,        // border colour: auto = ink outline, or a colour
+  border: "solid",     // "solid" | "dashed" | "dotted" | "left" (accent bar only) | "none"
+  shadow: true,        // chunky bottom shadow
+)[ ... ]
+```
+
+Suggested conventions: TL;DR → default (`sun`), definition → `sky`, theorem → `grape`,
+remark → `mint` + `border: "dashed", shadow: false`, aside or citation → `border: "left"`.
+With a custom `fill`, the text colour switches to dark or light automatically, so it stays readable
+in dark mode.
+
+| Other helpers | Renders as |
 |---|---|
-| `#guide-entry(title: "From the Guide")[…]` | yellow aside, good for a TL;DR |
-| `#definition(title: "…")[…]` | blue box |
-| `#theorem(title: "…")[…]` | purple box |
-| `#remark[…]` | dashed green box |
-| `#callout(kind: "note", title: "…")[…]` | generic box (`kind` maps to CSS class `callout-<kind>`) |
-| `#margin-note[…]` | small accent-tinted side note |
 | `#figure-box(caption: […])[…]` | framed figure with caption (wrap Typst drawings in `html.frame`) |
 | `#cylinder-flow()` | animated line art: potential flow past a cylinder + vortex street + sun |
 | `#flow-divider()` | animated wave line between sections |
@@ -144,7 +156,7 @@ Typst's HTML export is still experimental. Things to know:
 
 - Page-layout features (`page`, `columns`, `place`, `pagebreak`, `h`/`v` spacing) have no HTML meaning
   and are ignored. Use `html.frame` when you need exact visual layout.
-- `#footnote` is not supported (it clashes with the custom page shell). Use `#margin-note[…]`.
+- `#footnote` is not supported (it clashes with the custom page shell). Use `#callout(border: "left")[…]`.
 - Raw HTML is available everywhere: `html.div(class: "x")[…]`, `html.elem("details")[…]`, etc.
 - `--features html,bundle` must be passed (already in `build.sh` and CI).
 - When upgrading Typst, bump `typst-version` in `.github/workflows/deploy.yml` too, then build

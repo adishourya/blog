@@ -1,6 +1,6 @@
 #import "../lib/components.typ": *
 
-#guide-entry(title: "The Guide has this to say about the author")[
+#callout(title: "The Guide has this to say about the author", color: "sun")[
   #lorem(30)
 ]
 
