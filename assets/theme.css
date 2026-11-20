@@ -190,6 +190,25 @@ a.toc-title:hover { text-decoration: underline; text-decoration-color: var(--acc
 .toc-sec a.toc-title { font-weight: 400; }
 .toc-empty { color: var(--muted); }
 
+/* ---------- the guide's front page: chapters continue below the contents ---------- */
+html { scroll-behavior: smooth; }
+#contents, .flow-chapter, .flow-chapter h3 { scroll-margin-top: 1.5rem; }
+.flow-chapter { margin-top: calc(var(--line) * 3); }
+.flow-chapter-title {
+  font-size: clamp(1.5rem, calc(2.6vw / var(--z)), 2.1rem); line-height: 1.25; padding-bottom: 0.5rem;
+  display: flex; align-items: baseline; gap: 1.5ch;
+}
+.flow-chapter-num { color: var(--clay); flex: none; }
+.flow-chapter h3 { font-size: 1.12em; margin-top: calc(var(--line) * 1.6); }
+.flow-chapter h4 { font-size: 1em; margin: calc(var(--line) * 1.2) auto 0.4rem; }
+.flow-chapter-end {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 2ch;
+  margin-top: calc(var(--line) * 1.5); padding-top: 0.6rem; border-top: 1.5px dashed var(--edge); font-size: 0.9em;
+}
+.flow-chapter-end a { text-decoration: none; color: var(--muted); }
+.flow-chapter-end a:hover { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 /* ---------- chapter pages: previous / contents / next ---------- */
 .chapter-nav {
   display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem 2ch; align-items: stretch;

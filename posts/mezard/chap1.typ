@@ -1,7 +1,7 @@
 #import "../../lib/components.typ": *
 
 #callout(title: "Takeaway of the section", color: olive)[
-Before we move ahead with the section. #link("Information Theory, Inference and Learning Algorithms")[Information Theory by David J. C MacKay] is a highly suggested read if you ever get interested in information theory and its applications. We will only go over quick instincts of information theory; which i believe is replete for the book.
+Before we move ahead with the section. #link("https://www.inference.org.uk/mackay/itila/")[Information Theory by David J. C MacKay] is a highly suggested read if you ever get interested in information theory and its applications. We will only go over quick instincts of information theory; which i believe is replete for the book.
 ]
 
 ===  Entropy and Information Content

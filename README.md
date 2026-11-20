@@ -18,6 +18,8 @@ Every guide follows a book or a course, and is written as **one outline**: `post
   **table of contents** made from the headings, one row per chapter, each opening to its
   sections. Statuses come from the text itself: a section with nothing under it is
   `[in progress]`, otherwise `[done]`; a chapter is `[done]` when it has text and no empty sections.
+  Below the contents the page **continues with every chapter that has text**, so scrolling down
+  reads the whole guide; the contents link to those chapters and sections on the same page.
 - **`<slug>/01.html`, `<slug>/02.html`, … — one page per chapter that has any text**, with
   previous / contents / next links. Sections get anchors, so the contents can link straight to them.
 - The **home page** lists every guide with a progress bar (chapters done / chapters).

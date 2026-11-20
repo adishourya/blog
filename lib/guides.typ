@@ -95,12 +95,32 @@
 
 // A chapter's page body: its content, with headings moved up two levels (=== → <h2>) and
 // sections given anchors for the contents links.
-#let chapter-body(c) = for x in c.body {
+//   shift: how many levels headings move up — 1 on a chapter page (=== → <h2>),
+//          0 inside the guide's front page, where the chapter title itself is the <h2>.
+#let chapter-body(c, shift: 1) = for x in c.body {
   if type(x) == dictionary {
-    html.elem("h2", attrs: (id: x.id))[#x.heading.body]
+    html.elem("h" + str(3 - shift), attrs: (id: x.id))[#x.heading.body]
   } else if _is-heading(x) {
-    html.elem("h" + str(calc.min(x.depth - 1, 6)))[#x.body]
+    html.elem("h" + str(calc.min(x.depth - shift, 6)))[#x.body]
   } else { x }
+}
+
+#let chapter-id(c) = "ch" + pad2(c.num)
+
+// The guide's front page continues below the contents with every chapter that has text,
+// so scrolling down reads the whole guide. Each chapter ends with a link back to the contents.
+#let guide-flow(slug, o) = for c in chapters-of(o).filter(c => c.has-text) {
+  html.section(class: "flow-chapter", id: chapter-id(c))[
+    #html.h2(class: "flow-chapter-title")[
+      #html.span(class: "flow-chapter-num")[#pad2(c.num)]
+      #c.title
+    ]
+    #chapter-body(c, shift: 0)
+    #html.p(class: "flow-chapter-end")[
+      #html.a(href: "#contents")[↑ contents]
+      #html.a(href: chapter-path(slug, c))[open this chapter on its own page →]
+    ]
+  ]
 }
 
 #let _status(done) = if done {
@@ -127,7 +147,7 @@
 #let _row-cells(slug, c) = {
   html.span(class: "toc-num")[#pad2(c.num)]
   if c.has-text {
-    html.a(class: "toc-title", href: chapter-path(slug, c))[#c.title]
+    html.a(class: "toc-title", href: "#" + chapter-id(c))[#c.title]
   } else {
     html.span(class: "toc-title")[#c.title]
   }
@@ -142,6 +162,7 @@
     html.p(class: "toc-empty")[No chapters planned yet.]
     return
   }
+  html.span(id: "contents")[]
   toc-legend
   for p in o.parts [
     #if p.title != none [= #p.title]
@@ -156,7 +177,7 @@
                 #for s in c.sections {
                   html.li(class: "toc-row toc-sec")[
                     #if s.has-text {
-                      html.a(class: "toc-title", href: chapter-path(slug, c) + "#" + s.id)[#s.title]
+                      html.a(class: "toc-title", href: "#" + s.id)[#s.title]
                     } else {
                       html.span(class: "toc-title")[#s.title]
                     }

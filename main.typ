@@ -3,7 +3,7 @@
 
 #import "lib/template.typ": page-shell, long-date
 #import "lib/site.typ": site-title, site-tagline
-#import "lib/guides.typ": outline-of, chapters-of, chapter-path, chapter-body, pad2, plain, progress-bar, toc, chapter-nav
+#import "lib/guides.typ": outline-of, chapters-of, chapter-path, chapter-body, guide-flow, pad2, plain, progress-bar, toc, chapter-nav
 #import "posts/_posts.typ": guides
 #import "lib/art.typ": cylinder-flow, card-banner
 
@@ -80,6 +80,7 @@
       #o.intro.join()
       #toc(g.slug, o)
       #o.after.join()
+      #guide-flow(g.slug, o)
     ]
   ]
 
