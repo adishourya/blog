@@ -1,7 +1,7 @@
-/* Underclocked Thoughts art: the ∞ brand mark and the fluid line art (hero cylinder flow,
-   streamline card banners, wave divider). The shared theme is assets/theme.css. */
-:root { --brand-glyph: "∞"; --brand-bg: var(--sun); }
-.brand::before { color: #1b1e2b; font-weight: 800; }
+/* Underclocked Thoughts art: the CPU brand mark and mascot, and the fluid line art (hero flow
+   around the mascot, streamline card banners, wave divider). The shared theme is assets/theme.css. */
+:root { --brand-bg: var(--sun); --brand-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b1e2b' stroke-width='2' stroke-linecap='round'%3E%3Crect x='6' y='6' width='12' height='12' rx='2'/%3E%3Cpath d='M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4'/%3E%3Ccircle cx='10' cy='11' r='.6' fill='%231b1e2b'/%3E%3Ccircle cx='14' cy='11' r='.6' fill='%231b1e2b'/%3E%3C/svg%3E"); }
+.brand::before { background-size: 18px; }
 
 .line-art { stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
 .line-art .stream { stroke: currentColor; stroke-opacity: .28; stroke-width: 1.6; }
@@ -11,8 +11,18 @@
 .card-banner .stream { stroke: currentColor; stroke-opacity: .35; }
 .card-banner .flow { stroke: currentColor; }
 .cylinder-flow .flow { stroke: var(--sky); }
-.cylinder-flow .body { fill: color-mix(in srgb, var(--sun) 25%, var(--surface)); stroke: currentColor; stroke-width: 2.4; }
-.cylinder-flow .body-axis { stroke: currentColor; stroke-opacity: .35; stroke-width: 1.4; stroke-dasharray: 4 5; }
+
+/* the CPU mascot */
+.cpu-pin { stroke: currentColor; stroke-width: 2.6; }
+.cpu-body { fill: var(--sun); stroke: currentColor; stroke-width: 2.4; }
+.cpu-die { fill: color-mix(in srgb, var(--sun) 30%, var(--surface)); stroke: currentColor; stroke-width: 1.6; }
+.cpu-eye { fill: currentColor; }
+.cpu-smile { fill: none; stroke: currentColor; stroke-width: 2; }
+.bob, .blink { transform-box: fill-box; transform-origin: center; }
+.bob { animation: bob 3.2s ease-in-out infinite; }
+.blink { animation: blink 4.5s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-3px); } }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
 .cylinder-flow .vortex { stroke: var(--coral); stroke-width: 2; }
 .hero-art { color: var(--ink); }
 .sun-disc { fill: var(--sun); stroke: currentColor; stroke-width: 2.4; }

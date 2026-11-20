@@ -65,17 +65,41 @@
   ]
 }
 
-// Hero / figure: uniform flow past a cylinder, a vortex street in the wake, and the sun.
-#let cylinder-flow(label: "Streamlines of uniform flow past a cylinder, with a vortex street in its wake") = {
-  let (W, H, cx, cy, R) = (600, 330, 190, 205, 40)
+// The mascot: a little CPU with pins, eyes and a smile, centred at (cx, cy). It fits inside
+// a circle of radius ~32, so the cylinder-flow streamlines (radius 40) wrap around it.
+#let _rect(x, y, w, h, rx: 0, class: "") = html.elem("rect", attrs: (
+  x: _fmt(x), y: _fmt(y), width: _fmt(w), height: _fmt(h), rx: _fmt(rx), class: class,
+))
+#let cpu-mascot(cx, cy, k: 1) = {
+  let u(v) = _fmt(v * k)
+  html.elem("g", attrs: (class: "cpu bob"))[
+    #for o in (-13, 0, 13) {
+      _line(_fmt(cx + o * k), _fmt(cy - 22 * k), _fmt(cx + o * k), _fmt(cy - 31 * k), class: "cpu-pin")
+      _line(_fmt(cx + o * k), _fmt(cy + 22 * k), _fmt(cx + o * k), _fmt(cy + 31 * k), class: "cpu-pin")
+      _line(_fmt(cx - 22 * k), _fmt(cy + o * k), _fmt(cx - 31 * k), _fmt(cy + o * k), class: "cpu-pin")
+      _line(_fmt(cx + 22 * k), _fmt(cy + o * k), _fmt(cx + 31 * k), _fmt(cy + o * k), class: "cpu-pin")
+    }
+    #_rect(cx - 22 * k, cy - 22 * k, 44 * k, 44 * k, rx: 7 * k, class: "cpu-body")
+    #_rect(cx - 14 * k, cy - 14 * k, 28 * k, 28 * k, rx: 4 * k, class: "cpu-die")
+    #html.elem("g", attrs: (class: "cpu-eyes blink"))[
+      #_circle(_fmt(cx - 6 * k), _fmt(cy - 3 * k), _fmt(2.6 * k), class: "cpu-eye")
+      #_circle(_fmt(cx + 6 * k), _fmt(cy - 3 * k), _fmt(2.6 * k), class: "cpu-eye")
+    ]
+    #_path("M" + _fmt(cx - 6 * k) + " " + _fmt(cy + 5 * k) + " Q" + _fmt(cx) + " " + _fmt(cy + 10 * k) + " " + _fmt(cx + 6 * k) + " " + _fmt(cy + 5 * k), class: "cpu-smile")
+  ]
+}
+
+// Hero: uniform flow past the CPU mascot (streamlines of flow past a cylinder), a vortex street
+// in its wake, and the sun.
+#let cylinder-flow(label: "The CPU mascot sitting in a stream: streamlines flow around it, with a vortex street in its wake") = {
+  let (W, H, cx, cy, R) = (600, 330, 190, 200, 56)
   _svg("0 0 " + str(W) + " " + str(H), class: "cylinder-flow", label: label)[
     #_sun(540, 42, 20)
-    #for (i, c) in (-112, -84, -58, -36, -16, 16, 36, 58, 84, 112).enumerate() {
+    #for (i, c) in (-130, -100, -72, -46, -20, 20, 46, 72, 100, 130).enumerate() {
       let pts = range(0, W + 1, step: 6).map(x => (x, cy - _psi-y(x - cx, c, R)))
       _streamline(_poly(pts), speed: calc.rem(i, 3))
     }
-    #_circle(cx, cy, R, class: "body")
-    #_line(cx - R - 4, cy, cx + R + 4, cy, class: "body-axis")
+    #cpu-mascot(cx, cy, k: R / 40)
     #for (k, x) in (290, 360, 430, 500, 570).enumerate() {
       let up = calc.rem(k, 2) == 0
       _vortex(x, cy + if up { -16 } else { 16 }, 13 - k, dir: if up { 1 } else { -1 })

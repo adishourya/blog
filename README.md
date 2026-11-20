@@ -128,7 +128,7 @@ technical detail → `grape`, side note → `mint` + `border: "dashed"`, citatio
 | `#diagram(node(…), edge("-\|>"), …)` | quick boxes-and-arrows diagram ([fletcher](https://typst.app/universe/package/fletcher)), inline SVG |
 | `#figure-box(caption: […])[…]` | framed figure with caption |
 | `#fig("<guide>/figs/x.png", alt: "…")` | an image file shipped with the guide (lazy-loaded; list it in `assets:`) |
-| `#cylinder-flow()` | animated hero: potential flow past a cylinder, a vortex street and a sun |
+| `#cylinder-flow()` | animated hero: the CPU mascot in a stream (potential flow past a cylinder), a vortex street and a sun |
 | `#flow-divider()` | animated wave line between sections |
 
 ## Maths, code, images
@@ -166,7 +166,8 @@ Typst's HTML export is still experimental:
   is neutral grey (#212121), never blue-tinted.
 - **Width**: the text column is about 80% of a laptop screen and stops at 1600px on ultra-wide
   screens.
-- **Art**: fluid line art — the hero shows streamlines of potential flow past a cylinder (computed in
+- **Art**: the CPU mascot (also the brand mark) and fluid line art — the hero shows the mascot sitting in a
+  stream: streamlines of potential flow past a cylinder (computed in
   `lib/art.typ` from ψ = U·y·(1 − R²/r²)) with a vortex street and a sun; guide cards have flowing
   streamlines behind their name; `#flow-divider()` is a travelling wave. Animations are pure CSS
   (`assets/art.css`) and switch off when the reader has "reduce motion" enabled.

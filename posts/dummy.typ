@@ -99,7 +99,7 @@ or `"none"`. `shadow: false` removes the bottom shadow:
 
 = Line art & animation
 
-`#cylinder-flow()` draws the animated hero figure: streamlines of potential flow
+`#cylinder-flow()` draws the animated hero figure: the CPU mascot sitting in a stream, with streamlines of potential flow
 past a cylinder, computed from $psi = U y (1 - R^2 \/ r^2)$, with a vortex street in the wake.
 
 #figure-box(caption: [Potential flow past a cylinder, from `#cylinder-flow()`.])[

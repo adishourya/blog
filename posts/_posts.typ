@@ -2,6 +2,7 @@
 // written chapter (<slug>/01.html, ...). Format: see lib/guides.typ. Order here = order on the home page.
 
 #import "what-if/toc.typ" as what-if
+#import "mezard/toc.typ" as mezard
 
 #let guides = (
   (
@@ -11,7 +12,7 @@
     source: "Mézard & Montanari",
     summary: "Getting started with Statistical Mechanics for computation",
     color: "coral",                    // coral | sun | mint | sky | grape
-    parts: (),                         // add posts/<guide>/toc.typ with its chapters (see the What If guide)
+    parts: mezard.parts,
   ),
   (
     slug: "causal-inference-what-if",

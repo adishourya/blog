@@ -5,7 +5,7 @@
 #import "lib/site.typ": site-title, site-tagline
 #import "lib/guides.typ": chapters-of, chapter-path, is-live, pad2, progress-bar, toc, chapter-nav
 #import "posts/_posts.typ": guides
-#import "lib/art.typ": cylinder-flow, card-banner, flow-divider
+#import "lib/art.typ": cylinder-flow, card-banner
 
 // Draft mode (./dev.sh passes --input drafts=true): also render chapters with status "draft".
 #let drafts = sys.inputs.at("drafts", default: "false") == "true"
@@ -28,9 +28,8 @@
       ]
       #html.div(class: "hero-art")[#cylinder-flow()]
     ]
-    #flow-divider()
 
-    #html.h2(class: "section-title")[Guides]
+    #html.h2(class: "section-title")[Articles]
     #html.ul(class: "guide-grid")[
       #for (i, g) in guides.enumerate() {
         html.li(class: "guide-card card-" + g.at("color", default: "sky"))[
@@ -68,7 +67,7 @@
   ]
 ]
 
-// ---------- Guides: a contents page each, plus one page per written chapter ----------
+// ---------- Articles: a contents page each, plus one page per written chapter ----------
 #for g in guides {
   document(g.slug + ".html", title: g.title)[
     #page-shell(
@@ -86,7 +85,7 @@
 
   for c in chapters-of(g).filter(c => is-live(c, drafts)) {
     let info = (
-      ("guide", html.a(href: "../" + g.slug + ".html")[#g.title]),
+      ("article", html.a(href: "../" + g.slug + ".html")[#g.title]),
       ("chapter", [#pad2(c.num)#if c.status == "draft" [ (draft)]]),
     )
     if c.at("pages", default: none) != none { info.push(("pages", [#g.source, pp. #c.pages])) }

@@ -3,6 +3,6 @@
 #let site-tagline = "A slow atom drifting through computational waters."
 #let site-author = "Adi Shourya"
 #let nav-links = (
-  ("index.html", "Guides"),
+  ("index.html", "Articles"),
   ("about.html", "About"),
 )
