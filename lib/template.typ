@@ -38,7 +38,7 @@
       #html.link(rel: "stylesheet", href: base + "style.css")
       #html.script(theme-init)
     ]
-    #html.body(class: "accent-" + accent)[
+    #html.body(class: "accent-" + accent + if path == "index.html" { " home" } else { "" })[
       #html.header(class: "site-header")[
         #html.div(class: "wrap header-inner")[
           #html.a(class: "brand", href: base + "index.html")[#site-title]

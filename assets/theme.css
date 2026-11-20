@@ -10,10 +10,11 @@
   --font-head: "Martian Mono", ui-monospace, monospace;
   --font-body: "JetBrains Mono", ui-monospace, monospace;
   --font-math: "STIX Two Math", "Latin Modern Math", "Cambria Math", math;
-  --size: clamp(1.02rem, 0.85rem + 0.3vw, 1.18rem);   /* ~17–18px on laptops */
+  --z: 1;                   /* page zoom: 1.25 on laptop-size screens (see the bottom of this file) */
+  --size: clamp(1.02rem, 0.85rem + calc(0.3vw / var(--z)), 1.18rem);
   --line: 2.05rem;          /* line height; tall enough that inline maths fits inside it */
-  --pad: clamp(16px, 5vw, 72px);
-  --measure: clamp(52rem, 80vw, 100rem);
+  --pad: clamp(16px, calc(5vw / var(--z)), 72px);
+  --measure: clamp(min(52rem, calc(100vw / var(--z) - 2 * var(--pad))), calc(80vw / var(--z)), 100rem);
   --shadow: 4px 4px 0 var(--edge);
   color-scheme: light;
 }
@@ -38,6 +39,7 @@ body {
   font-family: var(--font-body); font-size: var(--size); line-height: var(--line);
   overflow-x: hidden; -webkit-font-smoothing: antialiased;
 }
+body.home { background: var(--bg); }   /* the notebook paper is for articles, not the home page */
 .wrap { width: 100%; padding-inline: var(--pad); }
 main { padding-block: calc(var(--line) * 2) calc(var(--line) * 3); }
 article > * { max-width: var(--measure); margin-inline: auto; }
@@ -54,14 +56,14 @@ sup, sub { line-height: 0; }
 
 /* ---------- notebook: binding holes (wide screens) and a red double margin line ---------- */
 @media (min-width: 1000px) {
-  body::before {
+  body:not(.home)::before {
     content: ""; position: fixed; top: 0; bottom: 0; left: 14px; width: 26px; z-index: 0; pointer-events: none;
     background: radial-gradient(circle at 13px 13px, var(--hole) 9px, color-mix(in srgb, var(--ink) 25%, transparent) 10px, transparent 11px) 0 20px / 26px 64px repeat-y;
   }
 }
 article { position: relative; }
 @media (min-width: 900px) {
-  article::before {
+  body:not(.home) article::before {
     content: ""; position: absolute; top: -2rem; bottom: -3rem; width: 5px; pointer-events: none;
     left: calc((100% - min(var(--measure), 100%)) / 2 - 3ch);
     border-left: 1.5px solid var(--margin-red); border-right: 1.5px solid var(--margin-red); opacity: .85;
@@ -103,7 +105,7 @@ article { position: relative; }
 .meta { display: grid; grid-template-columns: 10ch minmax(0, 1fr); }
 .meta-key { color: var(--muted); }
 h1, h2, h3 { font-family: var(--font-head); text-wrap: balance; }
-h1 { font-stretch: 112.5%; font-weight: 800; letter-spacing: -0.03em; font-size: clamp(1.9rem, 4vw, 3.2rem); line-height: 1.15; }
+h1 { font-stretch: 112.5%; font-weight: 800; letter-spacing: -0.03em; font-size: clamp(1.9rem, calc(4vw / var(--z)), 3.2rem); line-height: 1.15; }
 
 /* ---------- headings: h2 sits on a rule that starts with a short clay bar ---------- */
 h2 {
@@ -206,7 +208,7 @@ a.toc-title:hover { text-decoration: underline; text-decoration-color: var(--acc
 /* ---------- home ---------- */
 article > .hero, article > .guide-grid, article > .section-title { max-width: var(--measure); }
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2rem; align-items: center; margin-bottom: var(--line); }
-.hero-title { font-size: clamp(2.2rem, 4.2vw, 3.8rem); font-stretch: 100%; margin: 0 0 0.3em; line-height: 1.05; overflow-wrap: anywhere; }
+.hero-title { font-size: clamp(2.2rem, calc(4.2vw / var(--z)), 3.8rem); font-stretch: 100%; margin: 0 0 0.3em; line-height: 1.05; overflow-wrap: anywhere; }
 .hero-lede { color: var(--muted); max-width: 46ch; margin: 0; line-height: 1.7; }
 .hero-art svg { width: 100%; height: auto; display: block; }
 .section-title { margin-top: var(--line); }
@@ -249,3 +251,11 @@ article > .hero, article > .guide-grid, article > .section-title { max-width: va
   .chapter-nav .up { grid-column: 1 / -1; grid-row: 2; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* ---------- laptop-size screens: render at 125%, like browser zoom ----------
+   Every vw-based size above is divided by --z, so widths come out exactly as they would at
+   125% browser zoom (the column, margins and type all scale together). */
+@media (min-width: 1000px) {
+  html { zoom: 1.25; }
+  :root { --z: 1.25; }
+}
