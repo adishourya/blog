@@ -1,8 +1,7 @@
-// Registry of guides. Each guide is a table-of-contents page (<slug>.html) plus one page per
-// written chapter (<slug>/01.html, ...). Format: see lib/guides.typ. Order here = order on the home page.
+// Registry of articles. Each one is an outline (posts/<article>/index.typ): its headings become
+// the contents page (<slug>.html) and the chapter pages (<slug>/01.html, ...). See lib/guides.typ.
+// Order here = order on the home page.
 
-#import "what-if/toc.typ" as what-if
-#import "mezard/toc.typ" as mezard
 
 #let guides = (
   (
@@ -12,7 +11,7 @@
     source: "Mézard & Montanari",
     summary: "Getting started with Statistical Mechanics for computation",
     color: "coral",                    // coral | sun | mint | sky | grape
-    parts: mezard.parts,
+    body: include "mezard/index.typ",
   ),
   (
     slug: "causal-inference-what-if",
@@ -21,6 +20,6 @@
     source: "Hernán & Robins",
     summary: "Causality is messy on medical data",
     color: "sun",
-    parts: what-if.parts,
+    body: include "what-if/index.typ",
   ),
 )

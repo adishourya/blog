@@ -82,3 +82,11 @@
   node-inset: 8pt,
   ..args,
 ))
+
+// The book's page range for a chapter: put `#book-pages("3–12")` anywhere in the chapter.
+// It shows in the contents row and the chapter header (see lib/guides.typ).
+#let book-pages(range) = metadata((book-pages: range))
+
+// Content shown below a guide's table of contents (e.g. notation, sources): wrap it in
+// `#after-contents[...]` anywhere before the first chapter of posts/<guide>/index.typ.
+#let after-contents(body) = metadata((after-contents: body))

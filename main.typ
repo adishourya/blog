@@ -3,12 +3,12 @@
 
 #import "lib/template.typ": page-shell, long-date
 #import "lib/site.typ": site-title, site-tagline
-#import "lib/guides.typ": chapters-of, chapter-path, is-live, pad2, progress-bar, toc, chapter-nav
+#import "lib/guides.typ": outline-of, chapters-of, chapter-path, chapter-body, pad2, plain, progress-bar, toc, chapter-nav
 #import "posts/_posts.typ": guides
 #import "lib/art.typ": cylinder-flow, card-banner
 
-// Draft mode (./dev.sh passes --input drafts=true): also render chapters with status "draft".
-#let drafts = sys.inputs.at("drafts", default: "false") == "true"
+// Each guide's outline (contents, chapters, statuses), read from its headings once.
+#let outlines = guides.map(g => outline-of(g.body))
 
 #asset("style.css", read("assets/theme.css") + "\n" + read("assets/art.css"))
 
@@ -38,7 +38,7 @@
             #html.p(class: "guide-source")[#g.source]
             #html.h3[#html.a(href: g.slug + ".html")[#g.title]]
             #html.p(class: "guide-summary")[#g.summary]
-            #html.p(class: "guide-progress")[#progress-bar(g, width: 12)]
+            #html.p(class: "guide-progress")[#progress-bar(outlines.at(i), width: 12)]
           ]
         ]
       }
@@ -67,41 +67,39 @@
   ]
 ]
 
-// ---------- Articles: a contents page each, plus one page per written chapter ----------
-#for g in guides {
+// ---------- Articles: a contents page each, plus one page per chapter that has text ----------
+#for (g, o) in guides.zip(outlines) {
   document(g.slug + ".html", title: g.title)[
     #page-shell(
       path: g.slug + ".html",
       title: g.title,
-      info: (("source", g.source), ("progress", progress-bar(g))),
+      info: (("source", g.source), ("progress", progress-bar(o))),
       description: g.summary,
       accent: g.at("color", default: "sky"),
     )[
-      #g.at("intro", default: none)
-      #toc(g, drafts: drafts)
-      #g.at("notes", default: none)
+      #o.intro.join()
+      #toc(g.slug, o)
+      #o.after.join()
     ]
   ]
 
-  for c in chapters-of(g).filter(c => is-live(c, drafts)) {
+  for c in chapters-of(o).filter(c => c.has-text) {
     let info = (
       ("article", html.a(href: "../" + g.slug + ".html")[#g.title]),
-      ("chapter", [#pad2(c.num)#if c.status == "draft" [ (draft)]]),
+      ("chapter", [#pad2(c.num)#if not c.done [ (in progress)]]),
     )
-    if c.at("pages", default: none) != none { info.push(("pages", [#g.source, pp. #c.pages])) }
-    if c.at("date", default: none) != none { info.push(("date", long-date(c.date))) }
-    document(chapter-path(g, c), title: c.title)[
+    if c.pages != none { info.push(("pages", [#g.source, pp. #c.pages])) }
+    document(chapter-path(g.slug, c), title: plain(c.title))[
       #page-shell(
-        path: chapter-path(g, c),
+        path: chapter-path(g.slug, c),
         title: c.title,
         info: info,
-        description: g.title + ", chapter " + str(c.num) + ": " + c.title,
+        description: g.title + ", chapter " + str(c.num) + ": " + plain(c.title),
         accent: g.at("color", default: "sky"),
-        noindex: c.status == "draft",
         base: "../",
       )[
-        #c.body
-        #chapter-nav(g, c, drafts: drafts)
+        #chapter-body(c)
+        #chapter-nav(g.slug, o, c)
       ]
     ]
   }

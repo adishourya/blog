@@ -2,8 +2,8 @@
 //  posts/dummy.typ — a tour of everything a post can use.
 //  Rendered (unlisted) at /dummy. Copy what you need into a chapter file.
 //
-//  A chapter is plain Typst. Its title, chapter number and page range come
-//  from the guide's toc.typ, so do NOT put a title at the top.
+//  Chapters live in a guide's outline (posts/<guide>/index.typ): a `==` heading
+//  starts a chapter, `===` a section. On the chapter page, `===` becomes <h2>.
 //  Headings: `=` → <h2>, `==` → <h3>, `===` → <h4>.
 // =====================================================================
 
@@ -223,6 +223,5 @@ When you need an element Typst doesn't have, write it directly:
 
 #flow-divider()
 
-That's the whole toolbox. To start a real guide: add `posts/<guide>/toc.typ` with its chapters,
-write each chapter as `posts/<guide>/chNN.typ`, and register the guide in `posts/_posts.typ`
-(see README.md).
+That's the whole toolbox. To start a real guide: write its outline in `posts/<guide>/index.typ`
+(`==` chapters, `===` sections) and register it in `posts/_posts.typ` (see README.md).

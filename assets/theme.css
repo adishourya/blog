@@ -46,7 +46,7 @@ a:hover { background: color-mix(in srgb, var(--accent) 25%, transparent); }
 ::selection { background: var(--sun); color: #1b1e2b; }
 
 /* ---------- the ruling: each text block rules its own lines, at the bottom of every line box ---------- */
-article p:not(.meta, .kicker, .callout-title, .guide-source, .guide-summary, .guide-progress, .hero-lede, .fig-note),
+article p:not(.meta, .kicker, .callout-title, .guide-source, .guide-summary, .guide-progress, .hero-lede, .fig-note, .toc-legend),
 article li:not(:has(> p), .toc-item, .toc-row, .guide-card) {
   line-height: var(--line);
   background-image: linear-gradient(to bottom, transparent calc(var(--line) - 1px), var(--ruling) calc(var(--line) - 1px));
@@ -172,13 +172,12 @@ a.toc-title { text-decoration: none; font-weight: 700; }
 a.toc-title:hover { text-decoration: underline; text-decoration-color: var(--accent); background: none; }
 .toc-leader { flex: 1 1 2ch; min-width: 2ch; align-self: center; height: 0; border-bottom: 2px dotted color-mix(in srgb, var(--ink) 30%, transparent); }
 .toc-meta { flex: none; color: var(--muted); font-size: 0.9em; font-variant-numeric: tabular-nums; }
-.toc-status { flex: none; font-weight: 700; font-size: 0.9em; }
-.toc-status.read { color: var(--mint); }
-.toc-status.draft { color: color-mix(in srgb, var(--sun) 75%, var(--ink)); }
-.toc-status.todo { color: var(--muted); font-weight: 400; }
-.toc-row:has(.toc-status.todo) .toc-title { color: var(--muted); }
+.toc-status { flex: none; font-weight: 700; font-size: 0.9em; white-space: nowrap; }
+.toc-status.done { color: var(--mint); }
+.toc-status.progress { color: color-mix(in srgb, var(--sun) 70%, var(--ink)); font-weight: 400; }
+.toc-row > span.toc-title { color: var(--muted); }   /* not written yet: no link */
 .toc-sec { font-size: 0.92em; }
-.toc-sec .toc-num { width: 4ch; font-weight: 400; }
+.toc-sec a.toc-title { font-weight: 400; }
 .toc-empty { color: var(--muted); }
 
 /* ---------- chapter pages: previous / contents / next ---------- */
