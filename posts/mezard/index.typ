@@ -1,11 +1,21 @@
 // Mézard & Montanari, Information, Physics, and Computation (OUP 2009), as one outline.
 // Chapter titles from the publisher's table of contents. Write under a == heading (or #include a
 // chNN.typ file that starts with it); === headings become its sections. See lib/guides.typ.
-
 #import "../../lib/components.typ": *
 
-== Introduction to information theory
-== Statistical physics and probability theory
+#callout(title: "Need for statistical mechanics for ML Engineers?", color:blue.lighten(20%))[
+Most of the time we think the subject of analysis for statistical mechanics is
+something like a solid state magnet. But thats not at all to it.
+Statistical mechanics has built sophesticated methods to deal with situations where there is insanely high number of candidates for a sollution. Just like in *Artificial intellegence* or a travelling salesman problem.
+]
+
+#callout(title:"Quick Fact")[
+Physicsts Geoffrey Hinton and John J. Hopfield won and shared the 2024 Nobel Prize in Physics for their contribution in the work of Boltzman machines. A mostly computer science problem.
+]
+
+== Basics of information theory
+#include("chap1.typ")
+
 == Introduction to combinatorial optimization
 == Probabilistic toolbox
 == The random energy model
