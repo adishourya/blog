@@ -1,0 +1,30 @@
+/* Underclocked Thoughts art: the ∞ brand mark and the fluid line art (hero cylinder flow,
+   streamline card banners, wave divider). The shared theme is assets/theme.css. */
+:root { --brand-glyph: "∞"; --brand-bg: var(--sun); }
+.brand::before { color: #1b1e2b; font-weight: 800; }
+
+.line-art { stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.line-art .stream { stroke: currentColor; stroke-opacity: .28; stroke-width: 1.6; }
+.line-art .flow { stroke: var(--accent); stroke-width: 2.4; stroke-dasharray: 10 26; animation: flow 2.4s linear infinite; }
+.line-art .flow-1 { animation-duration: 3.1s; }
+.line-art .flow-2 { animation-duration: 1.9s; }
+.card-banner .stream { stroke: currentColor; stroke-opacity: .35; }
+.card-banner .flow { stroke: currentColor; }
+.cylinder-flow .flow { stroke: var(--sky); }
+.cylinder-flow .body { fill: color-mix(in srgb, var(--sun) 25%, var(--surface)); stroke: currentColor; stroke-width: 2.4; }
+.cylinder-flow .body-axis { stroke: currentColor; stroke-opacity: .35; stroke-width: 1.4; stroke-dasharray: 4 5; }
+.cylinder-flow .vortex { stroke: var(--coral); stroke-width: 2; }
+.hero-art { color: var(--ink); }
+.sun-disc { fill: var(--sun); stroke: currentColor; stroke-width: 2.4; }
+.sun-ray { stroke: var(--sun); stroke-width: 3; }
+.spin, .spin-slow { transform-box: fill-box; transform-origin: center; animation: spin 4s linear infinite; }
+.spin-rev { animation-direction: reverse; }
+.spin-slow { animation-duration: 24s; }
+
+.flow-divider { display: block; width: 100%; height: 22px; margin: 1.5rem auto; color: var(--sky); overflow: hidden; }
+.flow-divider .wave-line { stroke: currentColor; stroke-width: 2.4; vector-effect: non-scaling-stroke; }
+.flow-divider .wave { animation: wave-shift 2.5s linear infinite; }
+
+@keyframes flow { to { stroke-dashoffset: -36; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes wave-shift { to { transform: translateX(-40px); } }

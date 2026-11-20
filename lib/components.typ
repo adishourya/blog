@@ -1,7 +1,9 @@
 // Reusable content blocks for posts. Each maps to a CSS class in assets/style.css.
-// Also re-exports the animated line art from art.typ (flow-divider, cylinder-flow).
+// Also re-exports this blog's animated line art from art.typ. Shared by both blogs:
+// keep identical in ~/code/claude_blogs and ~/code/blog.
 
-#import "art.typ": flow-divider, cylinder-flow
+#import "art.typ": *   // each blog's own line art, re-exported for posts
+#import "@preview/fletcher:0.5.8" as fletcher: node, edge
 
 // Palette names usable anywhere a colour is expected. Values live in assets/style.css.
 #let _palette = ("coral", "sun", "mint", "sky", "grape")
@@ -62,3 +64,21 @@
   #body
   #if caption != none { html.figcaption[#caption] }
 ]
+
+// An image file shipped with the post. The file must also be listed in the post's
+// `assets:` in posts/_posts.typ (main.typ copies those into the site).
+//   #figure-box(caption: [...])[#fig("my-guide/figs/plot.png", alt: "what it shows")]
+// `src` is relative to posts/ (e.g. "what-if/figs/fig-01.png"); it is served from the site root,
+// so it works from guide pages and from chapter pages in a subfolder alike.
+#let fig(src, alt: "") = html.img(src: if src.starts-with("/") or src.starts-with("http") { src } else { "/" + src }, alt: alt, loading: "lazy")
+
+// A quick diagram (boxes and arrows), drawn with fletcher and exported as inline SVG.
+//   #diagram(node((0,0), [Cause]), edge("-|>"), node((1,0), [Effect]))
+// Coordinates are (column, row). See posts/dummy.typ for more examples.
+#let diagram(..args) = html.frame(fletcher.diagram(
+  spacing: (3em, 2em),
+  node-stroke: 1pt,
+  node-corner-radius: 4pt,
+  node-inset: 8pt,
+  ..args,
+))

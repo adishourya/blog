@@ -1,4 +1,4 @@
-#import "../lib/components.typ": *
+#import "../../lib/components.typ": *
 
 = Chapter 1 : Definition of causal effect
 #callout(title: "Takeaway of the subsection", color: "#88c0d0")[

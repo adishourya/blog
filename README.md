@@ -1,114 +1,109 @@
-# Infinite Improbability
+# Underclocked Thoughts
 
-*Hitchhiker's guides to physics, computation & learning.* Live at **https://adishourya.pages.dev**.
+*A slow atom drifting through computational waters.* Live at **https://adishourya.pages.dev**.
 
 The whole site is written in [Typst](https://typst.app) and compiled to HTML with Typst's
-(experimental) **bundle** export: one `main.typ` emits every page, the stylesheet and the
-images. Every push to `main` rebuilds and deploys to Cloudflare Pages via GitHub Actions.
+(experimental) **bundle** export: one `main.typ` emits every page, the stylesheet and the images.
+Every push to `main` rebuilds and deploys to Cloudflare Pages via GitHub Actions.
+
+**Sibling blog:** `~/code/claude_blogs` (Claude Thoughts, private) uses the same engine and theme. The files marked *shared* below
+must stay identical in both repos; copy them across when you change them.
+
+## How the site is organised
+
+Every guide follows a book or a course:
+
+- **`<slug>.html` — the guide's front page**: a short intro, then a **table of contents**. One ruled
+  row per chapter with page range and a status tag: `[read]` (written, linked), `[draft]` (being
+  written) or `[todo]` (planned). Rows open to show the chapter's sections.
+- **`<slug>/01.html`, `<slug>/02.html`, … — one page per written chapter**, with previous / contents /
+  next links at the bottom.
+- The **home page** lists every guide with a progress bar. Guides are always open: what's
+  missing shows up as `[todo]` rows in the contents, not as "coming soon" cards.
 
 ## Layout
 
 ```
-main.typ              # entry point: emits index.html, about.html and one page per published guide
-posts/_posts.typ      # registry of guides (title, summary, status, date, body) — drives the home grid
-posts/about.typ       # the About page
-posts/<slug>.typ      # one file per guide
-lib/template.typ      # page shell: <head>, header/nav, theme toggle, footer; site title & tagline
-lib/components.typ    # content blocks: callout (the one box), figure-box
-lib/art.typ           # animated line art (inline SVG): hero cylinder flow, card banners, wave divider
-posts/dummy.typ       # style guide: a tour of every feature (unlisted page at /dummy)
-assets/style.css      # the theme (light/dark, full-width, grid of guides)
-build.sh              # production build into dist/ (published guides only; same as CI)
-dev.sh                # live preview with auto-reload + drafts, into dist-dev/
+main.typ                # entry point: home, about, style guide, and for each guide its contents + chapter pages
+posts/_posts.typ        # registry of guides (order = order on the home page)
+posts/<guide>/toc.typ   # a guide's parts and chapters: title, pages, status, sections, body
+posts/<guide>/chNN.typ  # one file per chapter
+posts/<guide>/figs/     # images shipped with a guide (listed in its `assets:`)
+posts/about.typ         # the About page
+posts/dummy.typ         # style guide: every feature next to its source (unlisted page at /dummy)
+lib/site.typ            # this blog's name, tagline, author, nav links
+lib/template.typ        # page shell: <head>, header, theme toggle, post header, footer        (shared)
+lib/guides.typ          # table of contents, progress bar, chapter navigation               (shared)
+lib/components.typ      # content blocks: callout, figure-box, fig, diagram                 (shared)
+lib/art.typ             # this blog's line art: fluid line art (hero cylinder flow, card banners, wave divider)
+assets/theme.css        # the Ruled Notebook theme                                          (shared)
+assets/art.css          # this blog's brand mark and art styles
+build.sh                # production build into dist/ (same as CI)
+dev.sh                  # live preview with auto-reload + drafts, into dist-dev/
 .github/workflows/deploy.yml   # CI: build + deploy on push to main
 ```
 
 ## Requirements
 
 - Typst **0.15.1** (CI pins the same version, so keep them in sync).
-- Optional: Python, to preview locally.
+- Network access on the first build: diagrams use the `@preview/fletcher` package, which Typst
+  downloads and caches.
 
-## Write a new guide
+## Add a guide
 
-> **Start from the style guide.** `posts/dummy.typ` shows every feature (text, math, callouts,
-> line art, Typst-drawn figures, code, tables, raw HTML) next to its source. It renders as an
-> unlisted page at **/dummy**: not on the home page, and marked `noindex` for search engines.
-> Copy it to `posts/<slug>.typ` and delete what you don't need.
-
-1. **Create the post** at `posts/<slug>.typ`. The slug becomes the URL: `adishourya.pages.dev/<slug>`.
+1. Create `posts/<guide>/toc.typ` with its parts and chapters:
 
    ```typ
-   #import "../lib/components.typ": *
-
-   #callout(title: "From the Guide")[
-     One-paragraph summary of what this guide covers and who it's for.
-   ]
-
-   = The cavity method
-   Consider a factor graph with $N$ variables $x_i in {plus.minus 1}$ …
-
-   $ Z = sum_(bold(x)) product_a psi_a (bold(x)_(partial a)) $
-
-   #callout(title: "Definition — Bethe free energy", color: "sky")[
-     $F_"Bethe" = -1/beta log Z_"Bethe"$
-   ]
-
-   == A sub-section
-   More text, *bold*, _italic_, `code`, #link("https://example.com")[a link].
+   #let parts = (
+     (title: "Part I · Foundations", chapters: (
+       (num: 1, title: "Introduction", pages: "1–20", status: "read",
+        sections: (("1.1", "Why this matters"), ("1.2", "Notation")),
+        body: include "ch01.typ"),
+       (num: 2, title: "The second chapter", status: "todo"),
+     )),
+   )
    ```
 
-   Do **not** add a title at the top: the template renders it from the registry.
-   `=` in a post becomes an `<h2>`, `==` an `<h3>`, and so on.
+   `pages` and `sections` are optional. `body` is needed for `read` and `draft`; `todo` chapters
+   are only listed. A guide without parts can use a single part with `title: none`.
 
-2. **Register it** in `posts/_posts.typ`. Either flip an existing planned entry or add a new one:
+2. Register it in `posts/_posts.typ`:
 
    ```typ
+   #import "my-guide/toc.typ" as my-guide
    (
-     slug: "deep-hopfield-networks",
-     title: "Deep Hopfield Networks",
-     color: "sky",                                  // card/accent colour: coral | sun | mint | sky | grape
-     short: "Hopfield",                             // optional: name drawn in outline on the card banner
-     source: "Associative memory, revisited",      // small label above the title
-     summary: "From energy-based attractors to modern Hopfield layers and attention.",
-     status: "published",                           // or "ongoing" ("In progress") / "planned" ("Coming soon")
-     date: datetime(year: 2026, month: 11, day: 17),
-     body: include "deep-hopfield-networks.typ",
+     slug: "my-guide",                  // URL: /my-guide.html and /my-guide/01.html
+     title: "My Guide",
+     short: "Guide",                    // drawn in outline on the home-page card
+     source: "Author & Author",         // shown on the card and in the page headers
+     summary: "One line for the home-page card.",
+     color: "sky",                      // coral | sun | mint | sky | grape
+     intro: include "my-guide/intro.typ",   // optional: shown above the contents
+     notes: include "my-guide/notes.typ",   // optional: shown below the contents
+     parts: my-guide.parts,
+     assets: (),                        // image files under posts/, e.g. ("my-guide/figs/a.png",)
    ),
    ```
 
-   `date` and `body` are only needed when `status: "published"`. Cards appear on the home
-   page in the order of this list.
+## Write a chapter
 
-3. **Preview while writing**
+Start from the style guide: `posts/dummy.typ` shows every feature (callouts, quick diagrams, maths,
+figures, code, tables) next to its source, and renders unlisted at **/dummy**.
 
-   ```sh
-   ./dev.sh            # → http://127.0.0.1:3000  (or ./dev.sh 8000 for another port)
-   ```
-
-   This rebuilds on every save and **reloads the browser automatically**. Compile errors print
-   in the terminal, and the last good version stays on screen until you fix them. It also renders
-   **drafts**: any guide with a `body` whose status isn't `"published"` gets a page (marked
-   "Draft" with a "Draft preview →" card). Output goes to `dist-dev/`, which is git-ignored.
-
-   To check exactly what will go live, build like CI does: `./build.sh`, then open `dist/`.
-
-4. **Publish**: commit and push to `main`. The *Build & deploy* workflow takes about a minute.
-   Watch it with `gh run watch`.
-
-### Drafts
-
-Give the guide a `body` but keep `status: "ongoing"` (or `"planned"`). `./dev.sh` renders it so you
-can write and preview; `./build.sh` and the deploy skip it, so the live site only shows an
-"In progress" card. `date` is optional for drafts. When it's ready, set `status: "published"`
-and a `date`, then push.
+1. Write `posts/<guide>/chNN.typ`. Start it with `#import "../../lib/components.typ": *`. Don't put
+   the chapter title at the top — the page header shows it. `=` makes a section heading.
+2. In `toc.typ`, give the chapter `body: include "chNN.typ"` and `status: "draft"` while writing,
+   then `"read"` when it's done. List its `sections` so the contents can show them.
+3. Preview with `./dev.sh` (→ http://127.0.0.1:3000): rebuilds on save, reloads the browser, and
+   also renders `draft` chapters. `./build.sh` builds exactly what will go live.
+4. Publish: commit and push to `main`. The deploy takes about a minute (`gh run watch`).
 
 ### "My change didn't show up"
 
 - **The build failed.** `./build.sh` stops at the first Typst error and prints `error: …` (easy to miss
-  among the `warning:` lines). With `./dev.sh` the error shows on every save.
-- **It's a draft.** `./build.sh` skips anything not `"published"`. Use `./dev.sh`.
-- **Browser cache.** `python -m http.server` lets the browser reuse old copies. Hard-refresh
-  (Ctrl+Shift+R) or use `./dev.sh`, which reloads for you.
+  among the `warning:` lines).
+- **It's a draft.** Production builds only render `read` chapters. Use `./dev.sh`.
+- **Browser cache.** Hard-refresh (Ctrl+Shift+R), or use `./dev.sh`, which reloads for you.
 
 ## Components (`lib/components.typ`)
 
@@ -116,72 +111,65 @@ There is **one box**, `#callout`, styled with arguments:
 
 ```typ
 #callout(
-  title: "Definition — Stream function",  // optional pill label
-  color: "sky",        // pill + background tint: "coral" | "sun" | "mint" | "sky" | "grape", "#hex" or rgb(...)
+  title: "Definition — Stream function",  // optional title tag on the top border
+  color: "sky",        // frame + tint: "coral" | "sun" | "mint" | "sky" | "grape", "#hex" or rgb(...)
   fill: auto,          // background: auto = tint of color, none = transparent, or a colour
-  stroke: auto,        // border colour: auto = ink outline, or a colour
+  stroke: auto,        // border colour: auto = the box colour
   border: "solid",     // "solid" | "dashed" | "dotted" | "left" (accent bar only) | "none"
-  shadow: true,        // chunky bottom shadow
+  shadow: true,
 )[ ... ]
 ```
 
-Suggested conventions: TL;DR → default (`sun`), definition → `sky`, theorem → `grape`,
-remark → `mint` + `border: "dashed", shadow: false`, aside or citation → `border: "left"`.
-With a custom `fill`, the text colour switches to dark or light automatically, so it stays readable
-in dark mode.
+Conventions: summary / takeaways → default (`sun`), definition → `sky` + `border: "left"`,
+technical detail → `grape`, side note → `mint` + `border: "dashed"`, citation → `coral` + `border: "left"`.
 
 | Other helpers | Renders as |
 |---|---|
-| `#figure-box(caption: […])[…]` | framed figure with caption (wrap Typst drawings in `html.frame`) |
-| `#cylinder-flow()` | animated line art: potential flow past a cylinder + vortex street + sun |
+| `#diagram(node(…), edge("-\|>"), …)` | quick boxes-and-arrows diagram ([fletcher](https://typst.app/universe/package/fletcher)), inline SVG |
+| `#figure-box(caption: […])[…]` | framed figure with caption |
+| `#fig("<guide>/figs/x.png", alt: "…")` | an image file shipped with the guide (lazy-loaded; list it in `assets:`) |
+| `#cylinder-flow()` | animated hero: potential flow past a cylinder, a vortex street and a sun |
 | `#flow-divider()` | animated wave line between sections |
 
-To add a component: define a function that returns `html.div(class: "my-thing")[…]` (or any
-`html.<tag>`) in `lib/components.typ`, then style `.my-thing` in `assets/style.css`.
+## Maths, code, images
 
-## Math, code, images
-
-- **Math** is exported as native MathML, so no KaTeX/MathJax. Inline `$x^2$`, display `$ x^2 $`
-  (spaces inside the dollars).
-- **Code**: ```` ```python … ``` ```` gets syntax highlighting (light colours baked in by Typst,
-  so code blocks stay on a light card in dark mode too).
-- **Images**: `#image("figs/plot.svg")`. Paths are relative to the post file. Images are inlined into the
-  page, so keep them reasonably small (prefer SVG).
-- **Typst-drawn figures** (cetz, plots, diagrams): wrap them in `#html.frame[…]`. That renders the
-  content as an inline SVG, exactly as it would look in a PDF.
+- **Diagrams first.** Explain with small `#diagram`s whenever something has parts, steps or causes.
+- **Maths** is exported as native MathML. Inline `$x^2$`, display `$ x^2 $`.
+- **Code**: ```` ```python … ``` ```` gets syntax highlighting (on a light card in both themes).
+- **Images**: put them in `posts/<guide>/figs/`, list them in the guide's `assets:`, and show them
+  with `#fig(...)` inside a `#figure-box`. (`#image(...)` inlines the image into the page; use it only
+  for tiny ones.)
+- **Typst-drawn figures** (cetz, plots): wrap them in `#html.frame[…]` to get an inline SVG.
 
 ## HTML export caveats
 
-Typst's HTML export is still experimental. Things to know:
+Typst's HTML export is still experimental:
 
-- Page-layout features (`page`, `columns`, `place`, `pagebreak`, `h`/`v` spacing) have no HTML meaning
-  and are ignored. Use `html.frame` when you need exact visual layout.
-- `#footnote` is not supported (it clashes with the custom page shell). Use `#callout(border: "left")[…]`.
+- Page-layout features (`page`, `columns`, `place`, `pagebreak`, `h`/`v` spacing) are ignored in HTML.
+  Use `html.frame` when you need exact visual layout.
+- `#footnote` is not supported. Use `#callout(border: "left")[…]`.
 - Raw HTML is available everywhere: `html.div(class: "x")[…]`, `html.elem("details")[…]`, etc.
-- `--features html,bundle` must be passed (already in `build.sh` and CI).
-- When upgrading Typst, bump `typst-version` in `.github/workflows/deploy.yml` too, then build
-  locally and check the output before pushing.
+- When upgrading Typst, bump `typst-version` in `.github/workflows/deploy.yml` too.
 
-## Theme
+## Theme: Ruled Notebook (`assets/theme.css`, shared)
 
-Sunny, playful line art with a fluid-mechanics feel: the home page shows animated streamlines of
-potential flow past a cylinder (computed in `lib/art.typ` from ψ = U·y·(1 − R²/r²)) with a vortex
-street and a sun; each guide card has flowing streamlines behind its name drawn in outline; section
-headings get a travelling wave underline. Cards and boxes have thick outlines with a "pressable"
-bottom shadow; Outfit headings, Nunito Sans body text.
-
-- **Animations** (`.flow`, `.spin`, `.wave` in `assets/style.css`) are pure CSS and switch off
-  automatically when the reader has "reduce motion" enabled.
-
-- **Palette**: five colours (`coral`, `sun`, `mint`, `sky`, `grape`), each with a `-tint`, defined at the
-  top of `assets/style.css`. A guide's `color` in the registry sets its card colour *and* the accent
-  of its post page (header box, heading underlines, links, list markers).
-- **Light/dark**: `:root` holds the light values, `:root[data-theme="dark"]` the dark ones. The ☾/☀ button toggles and remembers the choice in
-  `localStorage`. Light is the default; dark only applies after the reader clicks the toggle.
-- **Width**: header, hero and the guide grid span the full viewport (side padding `--pad`); the grid
-  fits as many 290px+ cards per row as it can. Article text sits in a centred column of
-  `--measure` (52rem).
-- Site title, tagline and nav links live at the top of `lib/template.typ`.
+- **Type**: Martian Mono (wide) for headings, JetBrains Mono for everything else.
+- **Ruled lines**: every paragraph and list item draws its own notebook lines, one directly under each
+  line of text, so they never cross text. Inline maths and code are kept from stretching a line.
+  Boxes, figures, tables and display maths are not ruled.
+- **Headings**: `h2` sits on a rule that starts with a short clay bar; no `#` markers.
+- **Boxes**: square panels in the box's colour with the title tag on the top border; hard offset
+  shadows on the post header, figures, code and cards.
+- **Colours**: `coral`, `sun`, `mint`, `sky`, `grape` plus `clay` for numbers and accents. A guide's
+  `color` sets its card and the accent of its pages.
+- **Light/dark**: light is the default; the ☾/☀ button switches and remembers the choice. Dark mode
+  is neutral grey (#212121), never blue-tinted.
+- **Width**: the text column is about 80% of a laptop screen and stops at 1600px on ultra-wide
+  screens.
+- **Art**: fluid line art — the hero shows streamlines of potential flow past a cylinder (computed in
+  `lib/art.typ` from ψ = U·y·(1 − R²/r²)) with a vortex street and a sun; guide cards have flowing
+  streamlines behind their name; `#flow-divider()` is a travelling wave. Animations are pure CSS
+  (`assets/art.css`) and switch off when the reader has "reduce motion" enabled.
 
 ## Deployment
 
@@ -194,6 +182,3 @@ Repository secrets it needs:
 |---|---|
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token with **Account → Cloudflare Pages → Edit** |
 | `CLOUDFLARE_API_ACCOUNT_ID` | Cloudflare account ID |
-
-If the token expires, deploys fail with an auth error: create a new token and run
-`gh secret set CLOUDFLARE_API_TOKEN`.

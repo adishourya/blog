@@ -1,9 +1,9 @@
 // =====================================================================
 //  posts/dummy.typ — a tour of everything a post can use.
-//  Rendered (unlisted) at /dummy. Copy this file to start a new guide.
+//  Rendered (unlisted) at /dummy. Copy what you need into a chapter file.
 //
-//  A post is plain Typst. The page title, kicker and date come from the
-//  registry (posts/_posts.typ), so do NOT put a title at the top.
+//  A chapter is plain Typst. Its title, chapter number and page range come
+//  from the guide's toc.typ, so do NOT put a title at the top.
 //  Headings: `=` → <h2>, `==` → <h3>, `===` → <h4>.
 // =====================================================================
 
@@ -112,6 +112,48 @@ past a cylinder, computed from $psi = U y (1 - R^2 \/ r^2)$, with a vortex stree
 
 Animations stop automatically for readers who turn on "reduce motion".
 
+= Quick diagrams
+
+Prefer a small diagram to a paragraph whenever something has parts and arrows:
+a pipeline, a cause and its effects, a before/after. `#diagram` draws boxes and arrows
+with #link("https://typst.app/universe/package/fletcher")[fletcher]. Coordinates are
+(column, row), and `edge("-|>")` with no coordinates connects the previous and next node.
+
+#figure-box(caption: [A confounder: $L$ causes both treatment $A$ and outcome $Y$.])[
+  #diagram(
+    node((0, 0), $L$, shape: circle),
+    edge((0, 0), (1, 1), "-|>"),
+    edge((0, 0), (2, 1), "-|>", bend: 20deg),
+    node((1, 1), $A$, shape: circle),
+    edge("-|>"),
+    node((2, 1), $Y$, shape: circle),
+  )
+]
+
+#figure-box(caption: [A pipeline: label edges, colour the node that matters.])[
+  #diagram(
+    node((0, 0), [Raw data]),
+    edge("-|>", [clean]),
+    node((1, 0), [Cohort]),
+    edge("-|>", [weight]),
+    node((2, 0), [Estimate], fill: rgb("#fff4d4")),
+  )
+]
+
+```typ
+#figure-box(caption: [...])[
+  #diagram(
+    node((0, 0), [Raw data]), edge("-|>", [clean]),
+    node((1, 0), [Cohort]),  edge("-|>", [weight]),
+    node((2, 0), [Estimate], fill: rgb("#fff4d4")),
+  )
+]
+```
+
+Images shipped with a guide go in `posts/<guide>/figs/` and are listed in the guide's
+`assets:` in `posts/_posts.typ`; show one with
+`#figure-box(caption: [...])[#fig("<guide>/figs/plot.png", alt: "...")]`.
+
 = Figures drawn with Typst
 
 Anything Typst can draw goes inside `html.frame`, which renders it as a crisp SVG.
@@ -181,5 +223,6 @@ When you need an element Typst doesn't have, write it directly:
 
 #flow-divider()
 
-That's the whole toolbox. To start a real guide: copy this file to
-`posts/<slug>.typ`, delete what you don't need, and register it in `posts/_posts.typ`.
+That's the whole toolbox. To start a real guide: add `posts/<guide>/toc.typ` with its chapters,
+write each chapter as `posts/<guide>/chNN.typ`, and register the guide in `posts/_posts.typ`
+(see README.md).

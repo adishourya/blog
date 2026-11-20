@@ -16,7 +16,7 @@
   "line",
   attrs: (x1: str(x1), y1: str(y1), x2: str(x2), y2: str(y2), class: class),
 )
-#let _fmt(v) = str(calc.round(v, digits: 1))
+#let _fmt(v) = str(calc.round(v, digits: 1)).replace("\u{2212}", "-")   // Typst writes negatives with U+2212
 #let _poly(pts) = "M" + pts.map(p => _fmt(p.at(0)) + " " + _fmt(p.at(1))).join(" L")
 
 // A streamline drawn twice: a faint guide line plus travelling "particles".
