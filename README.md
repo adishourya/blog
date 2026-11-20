@@ -15,7 +15,7 @@ Every guide follows a book or a course, and is written as **one outline**: `post
 (which can `#include` one file per chapter). Typst reads its headings and builds:
 
 - **`<slug>.html` — the guide's front page**: the intro (text before the first heading), then a
-  **table of contents** made from the headings, one ruled row per chapter, each opening to its
+  **table of contents** made from the headings, one row per chapter, each opening to its
   sections. Statuses come from the text itself: a section with nothing under it is
   `[in progress]`, otherwise `[done]`; a chapter is `[done]` when it has text and no empty sections.
 - **`<slug>/01.html`, `<slug>/02.html`, … — one page per chapter that has any text**, with
@@ -37,7 +37,7 @@ lib/template.typ        # page shell: <head>, header, theme toggle, post header,
 lib/guides.typ          # reads the outline: contents, statuses, chapter pages, navigation (shared)
 lib/components.typ      # callout, figure-box, fig, diagram, book-pages, after-contents   (shared)
 lib/art.typ             # this blog's line art: fluid line art (hero cylinder flow, card banners, wave divider)
-assets/theme.css        # the Ruled Notebook theme                                          (shared)
+assets/theme.css        # the Notebook theme (dot grid, margin line)                                          (shared)
 assets/art.css          # this blog's brand mark and art styles
 build.sh                # production build into dist/ (same as CI)
 dev.sh                  # live preview with auto-reload, into dist-dev/
@@ -151,15 +151,16 @@ Typst's HTML export is still experimental:
 - Raw HTML is available everywhere: `html.div(class: "x")[…]`, `html.elem("details")[…]`, etc.
 - When upgrading Typst, bump `typst-version` in `.github/workflows/deploy.yml` too.
 
-## Theme: Ruled Notebook (`assets/theme.css`, shared)
+## Theme: Notebook (`assets/theme.css`, shared)
 
-- **Type**: Martian Mono (wide) for headings, JetBrains Mono for everything else.
-- **Ruled lines**: every paragraph and list item draws its own notebook lines, one directly under each
-  line of text, so they never cross text. Inline maths and code are kept from stretching a line.
-  Boxes, figures, tables and display maths are not ruled.
+- **Paper**: a faint dot grid across the whole page; on wide screens, binding holes down the left
+  edge and a red double margin line beside the text column (both hidden on phones).
+- **Type**: Martian Mono (wide) for headings, JetBrains Mono for everything else, ~17–18px on laptops.
 - **Headings**: `h2` sits on a rule that starts with a short clay bar; no `#` markers.
 - **Boxes**: square panels in the box's colour with the title tag on the top border; hard offset
   shadows on the post header, figures, code and cards.
+- **Contents**: one row per chapter (number, title, dotted leader, `[done]` / `[in progress]`),
+  opening to its sections. No page numbers there — the book's pages show in each chapter's header.
 - **Colours**: `coral`, `sun`, `mint`, `sky`, `grape` plus `clay` for numbers and accents. A guide's
   `color` sets its card and the accent of its pages.
 - **Light/dark**: light is the default; the ☾/☀ button switches and remembers the choice. Dark mode

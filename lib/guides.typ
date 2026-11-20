@@ -14,7 +14,7 @@
 //   section   done = it has text under it; otherwise "in progress"
 //   chapter   done = it has text and none of its sections is empty; otherwise "in progress"
 // A chapter gets a page as soon as it has any text. `#book-pages("3–12")` anywhere in a chapter
-// adds the book's page range to the contents row and the chapter header.
+// adds the book's page range to the chapter header.
 //
 // Keep #set / #show rules out of the top level of these files (they would hide the headings).
 
@@ -132,7 +132,6 @@
     html.span(class: "toc-title")[#c.title]
   }
   html.span(class: "toc-leader", aria-hidden: true)[]
-  html.span(class: "toc-meta")[#if c.pages != none [pp. #c.pages] else [—]]
   _status(c.done)
 }
 
