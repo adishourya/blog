@@ -2,7 +2,7 @@
 // keep identical in ~/code/claude_blogs and ~/code/blog (site identity is in lib/site.typ).
 #import "site.typ": site-title, site-tagline, site-author, nav-links
 
-#let default-fonts = "https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,400..800&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+#let default-fonts = "https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,400..800&family=Spline+Sans+Mono:ital,wght@0,300..700;1,300..700&display=swap"
 
 // Applies a saved light/dark choice before first paint; light is the default.
 #let theme-init = "try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}"

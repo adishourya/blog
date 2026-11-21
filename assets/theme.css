@@ -1,4 +1,4 @@
-/* Notebook theme: dot-grid paper, binding holes and a red margin line. Shared by both blogs: keep this file identical in
+/* Notebook theme: dot-grid paper in the margins, binding holes and a red margin line. Shared by both blogs: keep this file identical in
    ~/code/claude_blogs and ~/code/blog. Blog-specific art and brand mark live in assets/art.css. */
 
 :root {
@@ -8,7 +8,8 @@
   --dot: color-mix(in srgb, var(--ink) 22%, transparent);             /* dot-grid paper */
   --margin-red: #e5867c; --hole: #e3e5ee;
   --font-head: "Martian Mono", ui-monospace, monospace;
-  --font-body: "JetBrains Mono", ui-monospace, monospace;
+  --font-body: "Spline Sans Mono", ui-monospace, monospace;
+  --w-body: 460;            /* body text weight (Spline Sans Mono is variable, 300–700); bold stays 700 */
   --font-math: "STIX Two Math", "Latin Modern Math", "Cambria Math", math;
   --z: 1;                   /* page zoom: 1.25 on laptop-size screens (see the bottom of this file) */
   --size: clamp(1.02rem, 0.85rem + calc(0.3vw / var(--z)), 1.18rem);
@@ -36,7 +37,7 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; color: var(--ink);
   background: radial-gradient(var(--dot) 1.1px, transparent 1.4px) 0 0 / 22px 22px, var(--bg);
-  font-family: var(--font-body); font-size: var(--size); line-height: var(--line);
+  font-family: var(--font-body); font-weight: var(--w-body); font-size: var(--size); line-height: var(--line);
   overflow-x: hidden; -webkit-font-smoothing: antialiased;
 }
 body.home { background: var(--bg); }   /* the notebook paper is for articles, not the home page */
@@ -62,6 +63,11 @@ sup, sub { line-height: 0; }
   }
 }
 article { position: relative; }
+body:not(.home) article {   /* the dots stay in the margins: the text column fades back to plain paper */
+  --edgeL: calc(50% - min(var(--measure), 100%) / 2);
+  background: linear-gradient(90deg, transparent 0, transparent calc(var(--edgeL) - 7rem), var(--bg) calc(var(--edgeL) - 1.5rem),
+    var(--bg) calc(100% - var(--edgeL) + 1.5rem), transparent calc(100% - var(--edgeL) + 7rem));
+}
 @media (min-width: 900px) {
   body:not(.home) article::before {
     content: ""; position: absolute; top: -2rem; bottom: -3rem; width: 5px; pointer-events: none;
@@ -183,11 +189,11 @@ a.toc-title:hover { text-decoration: underline; text-decoration-color: var(--acc
 .toc-leader { flex: 1 1 2ch; min-width: 2ch; align-self: center; height: 0; border-bottom: 2px dotted color-mix(in srgb, var(--ink) 30%, transparent); }
 .toc-status { flex: none; font-weight: 700; font-size: 0.9em; white-space: nowrap; }
 .toc-status.done { color: var(--mint); }
-.toc-status.progress { color: color-mix(in srgb, var(--sun) 70%, var(--ink)); font-weight: 400; }
+.toc-status.progress { color: color-mix(in srgb, var(--sun) 70%, var(--ink)); font-weight: var(--w-body); }
 .toc-row > span.toc-title { color: var(--muted); }   /* not written yet: no link */
 .toc-sec { font-size: 0.92em; }
 .toc-sec::after { content: ""; width: 2ch; flex: none; }   /* lines its status up with the chapter rows */
-.toc-sec a.toc-title { font-weight: 400; }
+.toc-sec a.toc-title { font-weight: var(--w-body); }
 .toc-empty { color: var(--muted); }
 
 /* ---------- the guide's front page: chapters continue below the contents ---------- */
@@ -248,7 +254,7 @@ article > .hero, article > .guide-grid, article > .section-title { max-width: va
 .guide-source { font-size: 0.85em; color: var(--muted); }
 .guide-summary { color: var(--muted); font-size: 0.95em; }
 .guide-progress { margin-top: auto !important; padding-top: 0.5rem; font-size: 0.85em; font-weight: 700; }
-.guide-progress .toc-bar { font-weight: 400; }
+.guide-progress .toc-bar { font-weight: var(--w-body); }
 
 /* ---------- footer, small screens, motion ---------- */
 .site-footer { border-top: 2px solid var(--edge); padding-block: 1.5rem; color: var(--muted); font-size: 0.9em; background: var(--surface); position: relative; }

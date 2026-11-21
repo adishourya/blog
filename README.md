@@ -157,7 +157,7 @@ Typst's HTML export is still experimental:
 
 - **Paper**: a faint dot grid across the whole page; on wide screens, binding holes down the left
   edge and a red double margin line beside the text column (both hidden on phones).
-- **Type**: Martian Mono (wide) for headings, JetBrains Mono for everything else, ~17–18px on laptops.
+- **Type**: Martian Mono (wide) for headings, Spline Sans Mono (weight 460) for everything else, ~17–18px on laptops.
 - **Headings**: `h2` sits on a rule that starts with a short clay bar; no `#` markers.
 - **Boxes**: square panels in the box's colour with the title tag on the top border; hard offset
   shadows on the post header, figures, code and cards.
