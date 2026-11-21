@@ -10,7 +10,7 @@
     short: "Mézard",                   // drawn on the home-page card
     source: "Mézard & Montanari",
     summary: "Getting started with Statistical Mechanics for computation",
-    color: "coral",                    // coral | sun | mint | sky | grape
+    color: "grape",                    // coral | sun | mint | sky | grape
     body: include "mezard/index.typ",
   ),
   (
