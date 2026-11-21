@@ -97,25 +97,42 @@
 // sections given anchors for the contents links.
 //   shift: how many levels headings move up — 1 on a chapter page (=== → <h2>),
 //          0 inside the guide's front page, where the chapter title itself is the <h2>.
-#let chapter-body(c, shift: 1) = for x in c.body {
+#let _chapter-piece(x, shift) = {
   if type(x) == dictionary {
     html.elem("h" + str(3 - shift), attrs: (id: x.id))[#x.heading.body]
   } else if _is-heading(x) {
     html.elem("h" + str(calc.min(x.depth - shift, 6)))[#x.body]
   } else { x }
 }
+#let chapter-body(c, shift: 1) = {
+  // Number figures per chapter, so both copies of a chapter (its page and the front page) agree.
+  for k in (image, table, raw) { counter(figure.where(kind: k)).update(0) }
+  for x in c.body { _chapter-piece(x, shift) }
+}
 
 #let chapter-id(c) = "ch" + pad2(c.num)
 
 // The guide's front page continues below the contents with every chapter that has text,
 // so scrolling down reads the whole guide. Each chapter ends with a link back to the contents.
+// The front page repeats each chapter's content, so a label (`<old_nokia>`) would exist twice
+// and `@old_nokia` would fail. This copy is rebuilt without labels: they live on the chapter
+// page only, and references on the front page link there.
+#let _unlabel(x) = {
+  if type(x) != content or not x.has("label") { return x }
+  let f = x.fields()
+  for k in ("label", "counter") { let _ = f.remove(k, default: none) }
+  if "caption" in f and f.caption != none { f.caption = f.caption.body }
+  let body = f.remove("body", default: none)
+  if body == none { x.func()(..f) } else { x.func()(body, ..f) }
+}
+
 #let guide-flow(slug, o) = for c in chapters-of(o).filter(c => c.has-text) {
   html.section(class: "flow-chapter", id: chapter-id(c))[
     #html.h2(class: "flow-chapter-title")[
       #html.span(class: "flow-chapter-num")[#pad2(c.num)]
       #c.title
     ]
-    #chapter-body(c, shift: 0)
+    #chapter-body((..c, body: c.body.map(_unlabel)), shift: 0)
     #html.p(class: "flow-chapter-end")[
       #html.a(href: "#contents")[↑ contents]
       #html.a(href: chapter-path(slug, c))[open this chapter on its own page →]
