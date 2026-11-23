@@ -39,6 +39,21 @@ Term lists use `/ Term: description`:
   and little whirls have lesser whirls, and so on to viscosity.
 ]
 
+= Headings
+
+Each level is a little quieter than the one above. The page title comes from the registry,
+so `=` (like "Headings" just above) is the biggest heading you write: a solid rule with a clay bar.
+
+== `==`: a thin faint rule with a shorter clay bar
+
+=== `===`: just a short clay bar
+
+==== `====`: a small clay square in front
+
+===== `=====`: muted small caps
+
+Anything deeper looks like `=====` (HTML stops at `<h6>`).
+
 = Math
 
 Inline math goes between dollars with no inner spaces: the velocity is

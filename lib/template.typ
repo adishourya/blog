@@ -21,6 +21,7 @@
   noindex: false,
   base: "",
   fonts: default-fonts,
+  jump: none,   // optional (href, label): an extra link in the sticky header, e.g. back to the contents
   body,
 ) = {
   let full-title = if title == none { site-title } else { title + " · " + site-title }
@@ -43,6 +44,10 @@
         #html.div(class: "wrap header-inner")[
           #html.a(class: "brand", href: base + "index.html")[#site-title]
           #html.nav(class: "site-nav", aria-label: "Main")[
+            #if jump != none {
+              let (href, label) = jump
+              html.a(class: "jump", href: href, title: label)[↑#html.span(class: "jump-label")[ #label]]
+            }
             #for (href, label) in nav-links {
               if href == path {
                 html.a(href: base + href, aria-current: "page")[#label]

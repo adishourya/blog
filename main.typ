@@ -2,7 +2,9 @@
 // Build with ./build.sh (typst compile --features html,bundle --format bundle main.typ dist/).
 
 #import "lib/template.typ": page-shell, long-date
-#import "lib/site.typ": site-title, site-tagline
+#import "lib/site.typ": site-title, site-tagline, site-fonts
+// This blog's fonts (lib/site.typ) instead of the shared template's default.
+#let page-shell = page-shell.with(fonts: site-fonts)
 #import "lib/guides.typ": outline-of, chapters-of, chapter-path, chapter-body, guide-flow, pad2, plain, progress-bar, toc, chapter-nav
 #import "posts/_posts.typ": guides
 #import "lib/art.typ": cylinder-flow, card-banner
@@ -76,6 +78,7 @@
       info: (("source", g.source), ("progress", progress-bar(o))),
       description: g.summary,
       accent: g.at("color", default: "sky"),
+      jump: ("#contents", "Contents"),
     )[
       #o.intro.join()
       #toc(g.slug, o)
@@ -98,6 +101,7 @@
         description: g.title + ", chapter " + str(c.num) + ": " + plain(c.title),
         accent: g.at("color", default: "sky"),
         base: "../",
+        jump: ("../" + g.slug + ".html#contents", "Contents"),
       )[
         #chapter-body(c)
         #chapter-nav(g.slug, o, c)

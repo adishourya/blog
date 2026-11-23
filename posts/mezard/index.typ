@@ -5,12 +5,16 @@
 
 #callout(title: "Need for statistical mechanics for ML Engineers?", color:blue.lighten(20%))[
 Most of the time we think the subject of analysis for statistical mechanics is
-something like a solid state magnet. But thats not at all to it.
-Statistical mechanics has built sophesticated methods to deal with situations where there is insanely high number of candidates for a sollution. Just like in *Artificial intellegence* or a travelling salesman problem.
+something like a solid state magnet. But that is not at all the case. Statistical
+mechanics has built sophisticated methods to deal with situations where there
+are very large number of candidates for a sollution. Just like in *Artificial
+intellegence*.
 ]
 
 #callout(title:"Quick Fact")[
-Physicsts Geoffrey Hinton and John J. Hopfield won and shared the 2024 Nobel Prize in Physics for their contribution in the work of Boltzman machines. A mostly computer science problem.
+Physicsts Geoffrey Hinton and John J. Hopfield won the 2024 Nobel
+Prize in Physics for their contribution in the work of Boltzman machines. A
+mostly computer science problem.
 ]
 
 = Part 1 Background

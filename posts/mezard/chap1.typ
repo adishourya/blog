@@ -1,7 +1,7 @@
 #import "../../lib/components.typ": *
 
 #callout(title: "Further reading", color: olive)[
-Before we move ahead with the section. #link("https://www.inference.org.uk/mackay/itila/")[Information Theory by David J. C MacKay] is a highly suggested read if you ever get interested in information theory and its applications. We will only go over quick instincts of information theory; which i believe is a poor substitute for the book.
+Before we move ahead with the section. #link("https://www.inference.org.uk/mackay/itila/")[Information Theory by David J. C MacKay] is a highly suggested read if you ever get interested in information theory and its applications. We will only go over quick instincts of information theory; which i believe is a poor substitute for the book, but is still replete for our current needs.
 ]
 
 ===  Entropy and Information Content
@@ -31,17 +31,17 @@ its information content. The base of the log depends on the convenience of the o
 ==== Exemplars of calculating Entropy and Information Content.
 + A fair coin toss has 2 equally probable outcomes, i.e a toss of a coin has 1 bit of entropy. And observing either 'heads' or a 'tails' has 1 bit of information content.
 
-+ A deck of playing cards has 40 pip (number) cards including the aces, and 12 (face) cards. If the experiment is observing a face card or observing a pip card, then the entropy of that experiment would be = (40/52)\*log2(52/40) + (12/52)\*log2(52/12) = 0.78 bits.
++ A deck of playing cards has 40 pip (number) cards including the aces, and 12 face cards. If the experiment is observing a face card or observing a pip card, then the entropy of that experiment would be = (40/52)\*log2(52/40) + (12/52)\*log2(52/12) = 0.78 bits.
 
 
 === The typical set
-So far we have looked at one coin toss at a time. The real power of entropy shows up when we look at long _sequences_. Take a bent coin that lands heads with probability $p = 0.1$, and toss it $n = 100$ times. A single coin toss has an entropy of 0.469. The event with "no heads at all" has a probability $0.9^100 approx 2^(-15)$. That is you would almost never see it. What you would see is a sequence with number of heads equal to its expectation. i.e around 10 heads. And any sequence with 10 heads has a probability of :
+So far we have looked at one coin toss at a time. The real power of entropy shows up when we look at long _sequences_. Take a bent coin that lands heads with probability $p = 0.1$, and toss it $n = 100$ times. A single coin toss has an entropy of $H(x) = 0.469$. The event with "no heads at all" has a probability $0.9^100 approx 2^(-15)$. That is you would almost never see it. What you would see is a sequence with number of heads equal to its expectation. i.e around 10 heads. And any sequence with 10 heads has a probability of :
   $ = 0.1^10 dot 0.9^90 $
   $ = 2^(log_2( 0.1^10 dot 0.9^90 )) $
   $ = 2^(10 dot log_2(0.1) + 90 dot log_2(0.9)) $
-  $ = 2^(-(10 log_2 10 + 90 log_2 (10\/9))) $
+  $ = 2^(-(10 log_2 10 + 90 log_2 (10\/9))) = 2^(-1 * n * H(x) ) $
   $ = 2^(-46.9) $
-  notice how this is just exp2(-1 \* number of trials \* entropy of trial).
+  // notice how this is just exp2(-1 \* number of trials \* entropy of trial).
   // so probability of one of the typical sequence is just $1/2^(n dot H(x)) $
 
 So a long sequence is almost certainly one whose information content is close to $n H(X)$. MacKay calls these sequences the _typical set_.
@@ -148,4 +148,4 @@ The decoder is wrong only if at least two of the three copies flip, which happen
   )
 ]
 
-Note, The longer the block, the closer the noise sticks to its typical number of flips, and the smaller the error.
+Note, The longer the block, the closer the noise sticks to its typical number of flips, and the smaller the error when generating input vocubulary.
