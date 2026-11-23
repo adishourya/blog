@@ -6,7 +6,18 @@
 
 // Applies a saved light/dark choice before first paint; light is the default.
 #let theme-init = "try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}"
-#let theme-toggle-js = "document.getElementById('theme-toggle').addEventListener('click',function(){var r=document.documentElement,d=r.dataset.theme||'light',n=d==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}})"
+#let theme-toggle-js = "(function(){var b=document.getElementById('theme-toggle'),r=document.documentElement;function sync(){b.setAttribute('aria-checked',r.dataset.theme==='dark'?'true':'false')}sync();b.addEventListener('click',function(){var n=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=n;sync();try{localStorage.setItem('theme',n)}catch(e){}})})()"
+// Phones: the sticky header slides away while scrolling down and comes back on scroll up.
+#let header-autohide-js = "(function(){var h=document.querySelector('.site-header'),mq=matchMedia('(max-width: 700px)'),y=scrollY;addEventListener('scroll',function(){var n=scrollY;if(!mq.matches||h.contains(document.activeElement)){h.classList.remove('is-hidden');y=n;return}if(Math.abs(n-y)<8)return;h.classList.toggle('is-hidden',n>y&&n>h.offsetHeight);y=n},{passive:true})})()"
+
+// Sun and moon line icons for the theme switch.
+#let _icon(cls, ..paths) = html.elem("svg", attrs: (
+  class: cls, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor",
+  "stroke-width": "2.2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true",
+))[#for d in paths.pos() { html.elem("path", attrs: (d: d)) }]
+#let _sun-icon = _icon("icon-sun", "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
+  "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4")
+#let _moon-icon = _icon("icon-moon", "M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.6 6.6 0 0 0 10.7 10.7z")
 
 // Wrap `body` in a full <html> document with head, header, nav and footer.
 //   path    this page's output file (highlights the active nav link)
@@ -55,8 +66,8 @@
                 html.a(href: base + href)[#label]
               }
             }
-            #html.button(id: "theme-toggle", class: "theme-toggle", type: "button", aria-label: "Toggle dark mode", title: "Toggle dark mode")[
-              #html.span(class: "icon-sun")[☀]#html.span(class: "icon-moon")[☾]
+            #html.button(id: "theme-toggle", class: "theme-toggle", type: "button", role: "switch", aria-label: "Dark mode", title: "Toggle dark mode")[
+              #html.span(class: "toggle-knob")[#_sun-icon#_moon-icon]
             ]
           ]
         ]
@@ -80,6 +91,7 @@
         ]
       ]
       #html.script(theme-toggle-js)
+      #html.script(header-autohide-js)
     ]
   ]
 }

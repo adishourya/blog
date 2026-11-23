@@ -92,24 +92,41 @@ body:not(.home) article {   /* the dots stay in the margins: the text column fad
 .site-nav { display: flex; align-items: center; gap: 0.25rem; }
 .site-nav a { padding: 0.35em 0.75em; text-decoration: none; color: var(--ink); }
 .site-nav a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+/* theme switch: a pill track with a knob that slides from sun (light) to moon (dark) */
 .theme-toggle {
-  width: 38px; height: 38px; margin-left: 0.25rem; cursor: pointer; font: inherit; font-size: 1rem;
-  color: var(--ink); background: var(--surface); border: 2px solid var(--edge);
+  position: relative; flex: none; width: 52px; height: 28px; margin-left: 0.5rem; padding: 0; cursor: pointer;
+  border: 1.5px solid var(--edge); border-radius: 999px;
+  background: color-mix(in srgb, var(--sun) 38%, var(--surface));
+  transition: background-color 250ms ease;
 }
-.icon-sun { display: none; }
-:root[data-theme="dark"] .icon-sun { display: inline; }
-:root[data-theme="dark"] .icon-moon { display: none; }
+.toggle-knob {
+  position: absolute; top: 2px; left: 2px; width: 21px; height: 21px; border-radius: 50%;
+  display: grid; place-items: center; color: #b86e00;
+  background: var(--surface); border: 1.5px solid var(--edge);
+  transition: transform 300ms cubic-bezier(.3, 1.4, .5, 1), color 250ms ease;
+}
+.toggle-knob svg { grid-area: 1 / 1; width: 13px; height: 13px; transition: opacity 200ms ease, transform 300ms ease; }
+.icon-moon { opacity: 0; transform: rotate(-90deg) scale(.6); }
+.theme-toggle:hover .toggle-knob { box-shadow: 0 0 0 3px color-mix(in srgb, var(--sun) 35%, transparent); }
+:root[data-theme="dark"] .theme-toggle { background: color-mix(in srgb, var(--grape) 40%, var(--surface)); }
+:root[data-theme="dark"] .toggle-knob { transform: translateX(24px); color: #c4b5fd; }
+:root[data-theme="dark"] .icon-sun { opacity: 0; transform: rotate(90deg) scale(.6); }
+:root[data-theme="dark"] .icon-moon { opacity: 1; transform: none; }
+:root[data-theme="dark"] .theme-toggle:hover .toggle-knob { box-shadow: 0 0 0 3px color-mix(in srgb, var(--grape) 40%, transparent); }
 
 /* ---------- Sticky header: brand, nav, "↑ Contents" and the theme toggle stay on screen ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 20;
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: transform 250ms ease;
 }
+.site-header.is-hidden { transform: translateY(-100%); }   /* phones, scrolling down (script in lib/template.typ) */
 html { scroll-padding-top: 88px; }   /* anchor jumps (#contents, section links) land below the header */
 .site-nav a.jump { color: var(--clay); font-weight: var(--w-bold, 700); white-space: nowrap; }
 .jump-label { margin-left: 0.4ch; }
 .site-nav a.jump:hover { background: color-mix(in srgb, var(--clay) 14%, transparent); }
+@media (max-width: 600px) { :root { --line: 1.75rem; } }   /* phones: tighter lines */
 @media (max-width: 560px) {
   .jump-label { display: none; }     /* phones: just the ↑ arrow */
   .site-nav { gap: 0; }
@@ -305,7 +322,6 @@ article > .hero, article > .guide-grid, article > .section-title { max-width: va
   .brand::before { width: 22px; height: 22px; background-size: 13px; }
   .site-nav { gap: 0; }
   .site-nav a { padding: 0.25em 0.45em; font-size: 0.85rem; }
-  .theme-toggle { width: 34px; height: 34px; }
   .toc-leader { display: none; }
   .toc-title { flex: 1 1 auto; }
   .toc-row { gap: 1ch; }
@@ -321,4 +337,8 @@ article > .hero, article > .guide-grid, article > .section-title { max-width: va
 @media (min-width: 1000px) {
   html { zoom: 1.25; }
   :root { --z: 1.25; }
+}
+@media (max-width: 600px) {   /* phones: a long box title may wrap, so keep it in the flow (still sitting on the border) */
+  .callout-title { position: relative; top: 0; left: 0; display: table; max-width: 100%;
+    margin: calc(-0.85em - var(--line) * 0.9) 0 0.6rem -0.5ch; }
 }

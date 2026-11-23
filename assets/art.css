@@ -44,6 +44,7 @@
    Overrides the shared theme (assets/theme.css), which stays identical across both blogs. */
 :root { --font-body: "Martian Mono", ui-monospace, monospace; --w-body: 250; --w-bold: 400;
         --line: 2.35rem; /* line height (shared theme: 2.05rem); also sets paragraph and heading spacing */ }
+@media (max-width: 600px) { :root { --line: 1.85rem; } }   /* phones: tighter lines */
 body, body * { font-style: normal !important; font-synthesis: none; }
 h1, h2, h3, h4, h5, h6, b, strong, th, dt, summary,
 .brand, .callout-title, summary.toc-row::after, .toc-num, a.toc-title, .toc-status,
