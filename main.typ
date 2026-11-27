@@ -40,7 +40,7 @@
             #html.p(class: "guide-source")[#g.source]
             #html.h3[#html.a(href: g.slug + ".html")[#g.title]]
             #html.p(class: "guide-summary")[#g.summary]
-            #html.p(class: "guide-progress")[#progress-bar(outlines.at(i), width: 12)]
+            #html.p(class: "guide-progress")[#progress-bar(outlines.at(i), guide: guides.at(i).slug, width: 12)]
           ]
         ]
       }
@@ -75,7 +75,7 @@
     #page-shell(
       path: g.slug + ".html",
       title: g.title,
-      info: (("source", g.source), ("progress", progress-bar(o))),
+      info: (("source", g.source), ("progress", progress-bar(o, guide: g.slug))),
       description: g.summary,
       accent: g.at("color", default: "sky"),
       jump: ("#contents", "Contents"),

@@ -8,8 +8,8 @@
   --dot: color-mix(in srgb, var(--ink) 22%, transparent);             /* dot-grid paper */
   --margin-red: #e5867c; --hole: #e3e5ee;
   --font-head: "Martian Mono", ui-monospace, monospace;
-  --font-body: "Spline Sans Mono", ui-monospace, monospace;
-  --w-body: 460;            /* body text weight (Spline Sans Mono is variable, 300–700); bold stays 700 */
+  --font-body: "Martian Mono", ui-monospace, monospace;
+  --w-body: 250;            /* body text weight (Martian Mono is variable, 100–800); bold stays 700 */
   --font-math: "STIX Two Math", "Latin Modern Math", "Cambria Math", math;
   --z: 1;                   /* page zoom: 1.25 on laptop-size screens (see the bottom of this file) */
   --size: clamp(1.02rem, 0.85rem + calc(0.3vw / var(--z)), 1.18rem);
@@ -226,6 +226,8 @@ math[display="block"] { display: block math; font-size: 1.3em; margin-block: var
 .toc-key { color: var(--muted); }
 .toc-bar { color: var(--mint); letter-spacing: -0.05em; line-height: 0; }
 .toc-bar-empty { color: color-mix(in srgb, var(--ink) 25%, transparent); }
+.read-mark { display: block; height: 1px; }
+.toc-item.is-read > * > .toc-row .toc-num::after, .toc-item.is-read > .toc-row .toc-num::after { content: "✓"; color: var(--mint); margin-left: 0.2ch; }
 .toc-legend { font-size: 0.88em; color: var(--muted); }
 .toc { list-style: none; margin: 0 auto var(--line); padding: 0; }
 .toc-sections { list-style: none; margin: 0 0 0.5rem; padding: 0 0 0 4.5ch; }

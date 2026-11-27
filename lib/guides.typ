@@ -112,6 +112,9 @@
 
 #let chapter-id(c) = "ch" + pad2(c.num)
 
+// Invisible marker at the end of a chapter: once it scrolls into view, the chapter counts as read.
+#let read-mark(slug, c) = html.elem("span", attrs: (class: "read-mark", data-guide: slug, data-chapter: str(c.num), aria-hidden: "true"))
+
 // The guide's front page continues below the contents with every chapter that has text,
 // so scrolling down reads the whole guide. Each chapter ends with a link back to the contents.
 // The front page repeats each chapter's content, so a label (`<old_nokia>`) would exist twice
@@ -137,6 +140,7 @@
       #html.a(href: "#contents")[↑ contents]
       #html.a(href: chapter-path(slug, c))[open this chapter on its own page →]
     ]
+    #read-mark(slug, c)
   ]
 }
 
@@ -146,14 +150,16 @@
   html.span(class: "toc-status progress")[\[in progress\]]
 }
 
-// "[██████░░░░] 10 / 22 chapters done"
-#let progress-bar(o, width: 22) = {
-  let all = chapters-of(o)
-  if all.len() == 0 { return [no chapters yet] }
-  let done = all.filter(c => c.done).len()
-  let filled = int(calc.round(width * done / all.len()))
-  html.span(class: "toc-bar")[\[#("█" * filled)#html.span(class: "toc-bar-empty")[#("░" * (width - filled))]\]]
-  [ #str(done) \/ #str(all.len()) chapters done]
+// Reading progress: "[██████░░░░] 10 / 23 chapters read". The reader's browser remembers which
+// chapters they reached the end of (localStorage, see reading-js in lib/template.typ); the page
+// ships an empty bar that the script fills in. Total = chapters that have text.
+#let progress-bar(o, guide: none, width: 22) = {
+  let total = chapters-of(o).filter(c => c.has-text).len()
+  if total == 0 { return [nothing to read yet] }
+  html.elem("span", attrs: (class: "read-progress", data-guide: guide, data-total: str(total), data-width: str(width)))[
+    #html.span(class: "toc-bar")[\[#html.span(class: "toc-bar-fill")[]#html.span(class: "toc-bar-empty")[#("░" * width)]\]]
+    #html.span(class: "read-count")[0] \/ #str(total) chapters read
+  ]
 }
 
 #let toc-legend = html.p(class: "toc-legend")[
@@ -186,7 +192,7 @@
 
     #html.ol(class: "toc")[
       #for c in p.chapters {
-        html.li(class: "toc-item")[
+        html.elem("li", attrs: (class: "toc-item", data-guide: slug, data-chapter: str(c.num)))[
           #if c.sections.len() > 0 {
             html.elem("details")[
               #html.elem("summary", attrs: (class: "toc-row"))[#_row-cells(slug, c)]
@@ -220,6 +226,7 @@
   let link-to(x, cls, label) = html.a(class: cls, href: pad2(x.num) + ".html")[
     #html.elem("small")[#label] #pad2(x.num) #x.title
   ]
+  read-mark(slug, c)
   html.nav(class: "chapter-nav", aria-label: "Chapters")[
     #if i > 0 { link-to(live.at(i - 1), "prev", "← previous") } else { html.span[] }
     #html.a(class: "up", href: "../" + slug + ".html")[Contents]
